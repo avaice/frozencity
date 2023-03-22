@@ -1,0 +1,165 @@
+.game-window-wrapper {
+  position: relative;
+  --tileSize: calc(100vh / 3.5);
+  /* --tileSize: 220px; */
+  width: calc(var(--tileSize) * 3);
+  height: calc(var(--tileSize) * 2);
+  outline: double 8px black;
+  font-size: calc(var(--tileSize) * 0.075);
+}
+
+@keyframes fadeBlur {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.game-inventory {
+  animation: fadeBlur ease-in-out 0.2s;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(8px);
+  color: black;
+  transform: translateZ(1001px);
+}
+
+.game-inventory .game-inventory-title {
+  text-align: center;
+  line-height: calc(var(--tileSize) * 0.25);
+}
+
+.game-inventory .game-inventory-status {
+  text-align: center;
+}
+
+.game-inventory .game-inventory-items {
+  display: flex;
+}
+.game-inventory .game-inventory-items .game-inventory-items-child {
+  flex-grow: 1;
+  height: calc(var(--tileSize) * 1.6 - 20px);
+  width: 100%;
+  margin: 10px;
+}
+.game-inventory .game-inventory-items .game-inventory-items-child .desc {
+  overflow-wrap: break-word;
+  width: calc(var(--tileSize) * 1.3);
+  height: calc(var(--tileSize) * 0.9);
+}
+.game-inventory .game-inventory-items .game-inventory-items-child .use {
+  margin-top: calc(var(--tileSize) * 0.1);
+  width: calc(var(--tileSize) * 1.3);
+  height: calc(var(--tileSize) * 0.2);
+}
+.game-inventory .game-inventory-items .game-inventory-items-select {
+  width: calc(100% - 20px);
+  margin: 10px;
+  font-size: calc(var(--tileSize) * 0.1);
+  background: none;
+  border: none;
+  outline: none;
+}
+.game-inventory .game-inventory-items .left {
+  border: solid 1px black;
+  margin: 10px;
+}
+
+.game-status {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background-color: white;
+  border: solid 1px black;
+  padding: 4px;
+  color: black;
+  transform: translateZ(1000px);
+}
+
+.game-window {
+  --topMargin: calc(var(--tileSize) / 2);
+  transform-style: preserve-3d;
+  perspective-origin: calc(var(--tileSize) * 1.5)
+    calc(var(--tileSize) / 2 + var(--topMargin));
+  perspective: calc(var(--tileSize) * 1.5);
+  width: 100%;
+  height: 100%;
+}
+.game-window .wall {
+  color: black;
+  position: absolute;
+  height: calc(var(--tileSize) - 2px);
+  width: calc(var(--tileSize) * 1.5 - 2px);
+  background-color: rgba(255, 226, 162, 1);
+  top: var(--topMargin);
+  border: solid 1px black;
+  left: 0;
+}
+.game-window .l-d1 {
+  transform: rotateY(90deg);
+}
+.game-window .l-d1-open {
+  transform: translateX(calc(var(--tileSize) * -0.75))
+    translateZ(calc(var(--tileSize) * -0.75));
+}
+.game-window .l-d2 {
+  transform: rotateY(90deg) translateX(calc(var(--tileSize) * 1.5));
+}
+.game-window .l-d2-open {
+  transform: translateX(calc(var(--tileSize) * -0.75))
+    translateZ(calc(var(--tileSize) * -2.25));
+}
+.game-window .l-d3 {
+  transform: rotateY(90deg) translateX(calc(var(--tileSize) * 3));
+}
+.game-window .l-d3-open {
+  transform: translateX(calc(var(--tileSize) * -0.75))
+    translateZ(calc(var(--tileSize) * -3.75));
+}
+.game-window .c-d1 {
+  transform: translateX(calc(var(--tileSize) / 2 * 1.5))
+    translateZ(calc(var(--tileSize) * -0.75));
+}
+.game-window .c-d2 {
+  transform: translateX(calc(var(--tileSize) / 2 * 1.5))
+    translateZ(calc(var(--tileSize) * -2.25));
+}
+.game-window .c-d3 {
+  transform: translateX(calc(var(--tileSize) / 2 * 1.5))
+    translateZ(calc(var(--tileSize) * -3.75));
+}
+.game-window .r-d1 {
+  transform: rotateY(-90deg) translateZ(calc(var(--tileSize) * -1.5));
+}
+.game-window .r-d1-open {
+  transform: translateX(calc(var(--tileSize) * 2.25))
+    translateZ(calc(var(--tileSize) * -0.75));
+}
+.game-window .r-d2 {
+  transform: rotateY(-90deg) translateX(calc(var(--tileSize) * -1.5))
+    translateZ(calc(var(--tileSize) * -1.5));
+}
+.game-window .r-d2-open {
+  transform: translateX(calc(var(--tileSize) * 2.25))
+    translateZ(calc(var(--tileSize) * -2.25));
+}
+.game-window .r-d3 {
+  transform: rotateY(-90deg) translateX(calc(var(--tileSize) * -3))
+    translateZ(calc(var(--tileSize) * -1.5));
+}
+.game-window .r-d3-open {
+  transform: translateX(calc(var(--tileSize) * 2.25))
+    translateZ(calc(var(--tileSize) * -3.75));
+}
+
+@media screen and (max-width: 650px) {
+  .game-window-wrapper {
+    --tileSize: calc(100vw / 3.5);
+  }
+}

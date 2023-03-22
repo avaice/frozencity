@@ -1,0 +1,25 @@
+@keyframes fade {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+.door {
+  animation: fade 3s infinite ease-in-out;
+  box-shadow: 0 0 10px gray;
+  background-color: rgb(227, 190, 122);
+  width: 100%;
+  height: 100%;
+}
+
+.toggle {
+  animation: fade 3s infinite ease-in-out;
+  box-shadow: 0 0 10px gray;
+  width: 100%;
+  height: 100%;
+}

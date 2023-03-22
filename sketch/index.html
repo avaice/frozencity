@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>sketch</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        /* color: white;
+        background-color: white; */
+        display: flex;
+        width: 100%;
+        height: 100vh;
+        align-items: center;
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+      .game-window {
+        position: relative;
+        --tileSize: calc(100vh / 2.5);
+        --topMargin: calc(var(--tileSize) / 2);
+        transform-style: preserve-3d;
+        perspective-origin: calc(var(--tileSize) * 1.5)
+          calc(var(--tileSize) / 2 + var(--topMargin));
+        perspective: calc(var(--tileSize) * 1.5);
+        width: calc(var(--tileSize) * 3);
+        height: calc(var(--tileSize) * 2);
+        outline: double 8px black;
+      }
+      .game-window div {
+        position: absolute;
+        height: calc(var(--tileSize) - 2px);
+        width: calc(var(--tileSize) * 1.5 - 2px);
+        background-color: rgba(255, 226, 162, 1);
+        top: var(--topMargin);
+        border: solid 1px black;
+        left: 0;
+      }
+      .game-window .l-d1 {
+        transform: rotateY(90deg);
+      }
+      .game-window .l-d1-open {
+        transform: translateX(calc(var(--tileSize) * -0.75))
+          translateZ(calc(var(--tileSize) * -0.75));
+      }
+      .game-window .l-d2 {
+        transform: rotateY(90deg) translateX(calc(var(--tileSize) * 1.5));
+      }
+      .game-window .l-d2-open {
+        transform: translateX(calc(var(--tileSize) * -0.75))
+          translateZ(calc(var(--tileSize) * -2.25));
+      }
+      .game-window .l-d3 {
+        transform: rotateY(90deg) translateX(calc(var(--tileSize) * 3));
+      }
+      .game-window .l-d3-open {
+        transform: translateX(calc(var(--tileSize) * -0.75))
+          translateZ(calc(var(--tileSize) * -3.75));
+      }
+      .game-window .c-d1 {
+        transform: translateX(calc(var(--tileSize) / 2 * 1.5))
+          translateZ(calc(var(--tileSize) * -0.75));
+      }
+      .game-window .c-d2 {
+        transform: translateX(calc(var(--tileSize) / 2 * 1.5))
+          translateZ(calc(var(--tileSize) * -2.25));
+      }
+      .game-window .c-d3 {
+        transform: translateX(calc(var(--tileSize) / 2 * 1.5))
+          translateZ(calc(var(--tileSize) * -3.75));
+      }
+      .game-window .r-d1 {
+        transform: rotateY(-90deg) translateZ(calc(var(--tileSize) * -1.5));
+      }
+      .game-window .r-d1-open {
+        transform: translateX(calc(var(--tileSize) * 2.25))
+          translateZ(calc(var(--tileSize) * -0.75));
+      }
+      .game-window .r-d2 {
+        transform: rotateY(-90deg) translateX(calc(var(--tileSize) * -1.5))
+          translateZ(calc(var(--tileSize) * -1.5));
+      }
+      .game-window .r-d2-open {
+        transform: translateX(calc(var(--tileSize) * 2.25))
+          translateZ(calc(var(--tileSize) * -2.25));
+      }
+      .game-window .r-d3 {
+        transform: rotateY(-90deg) translateX(calc(var(--tileSize) * -3))
+          translateZ(calc(var(--tileSize) * -1.5));
+      }
+      .game-window .r-d3-open {
+        transform: translateX(calc(var(--tileSize) * 2.25))
+          translateZ(calc(var(--tileSize) * -3.75));
+      }
+
+      .controller {
+        display: none;
+      }
+
+      @media screen and (max-width: 500px) {
+        .game-window {
+          --tileSize: calc(100vw / 3.5);
+        }
+        .controller {
+          display: block;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="game-window">
+      <div class="l-d1"></div>
+      <!-- <div class="l-d1-open"></div> -->
+      <div class="l-d2"></div>
+      <!-- <div class="l-d2-open"></div> -->
+      <div class="l-d3"></div>
+      <!-- <div class="l-d3-open"></div> -->
+      <div class="r-d1"></div>
+      <!-- <div class="r-d1-open"></div> -->
+      <div class="r-d2"></div>
+      <!-- <div class="r-d2-open"></div> -->
+      <!-- <div class="r-d3"></div> -->
+      <div class="r-d3-open"></div>
+      <!-- <div class="c-d1"></div> -->
+      <!-- <div class="c-d2"></div> -->
+      <div class="c-d3"></div>
+    </div>
+    <div class="controller">
+      <p>Controller will shown here.</p>
+    </div>
+  </body>
+</html>
