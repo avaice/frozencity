@@ -101,6 +101,11 @@
   border: solid 1px black;
   left: 0;
 }
+
+.game-window .hide {
+  display: none;
+}
+
 .game-window .l-d1 {
   transform: rotateY(90deg);
 }

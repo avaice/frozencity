@@ -57,6 +57,10 @@ export const GameWindow = ({
           isWithinRange(posY(-2)) && isWithinRange(posX(-1))
             ? map[posY(-2)][posX(-1)]
             : "1",
+        l4:
+          isWithinRange(posY(-3)) && isWithinRange(posX(-1))
+            ? map[posY(-3)][posX(-1)]
+            : "1",
         r1: isWithinRange(posX(1)) ? map[position.y][posX(1)] : "1",
         r2:
           isWithinRange(posY(-1)) && isWithinRange(posX(1))
@@ -65,6 +69,10 @@ export const GameWindow = ({
         r3:
           isWithinRange(posY(-2)) && isWithinRange(posX(1))
             ? map[posY(-2)][posX(1)]
+            : "1",
+        r4:
+          isWithinRange(posY(-3)) && isWithinRange(posX(1))
+            ? map[posY(-3)][posX(1)]
             : "1",
       }
     } else {
@@ -81,6 +89,10 @@ export const GameWindow = ({
           isWithinRange(posY(-1)) && isWithinRange(posX(2))
             ? map[posY(-1)][posX(2)]
             : "1",
+        l4:
+          isWithinRange(posY(-1)) && isWithinRange(posX(3))
+            ? map[posY(-1)][posX(3)]
+            : "1",
         r1: isWithinRange(posY(1)) ? map[posY(1)][position.x] : "1",
         r2:
           isWithinRange(posY(1)) && isWithinRange(posX(1))
@@ -89,6 +101,10 @@ export const GameWindow = ({
         r3:
           isWithinRange(posY(1)) && isWithinRange(posX(2))
             ? map[posY(1)][posX(2)]
+            : "1",
+        r4:
+          isWithinRange(posY(1)) && isWithinRange(posX(3))
+            ? map[posY(1)][posX(3)]
             : "1",
       }
     }
@@ -102,6 +118,8 @@ export const GameWindow = ({
           className={`wall l-d1${
             around.l1 === "1" || (mapData.customWall as any)[around.l1]
               ? ""
+              : around.l2 !== "1" && !(mapData.customWall as any)[around.l2]
+              ? " hide"
               : "-open"
           }`}
         >
@@ -111,6 +129,8 @@ export const GameWindow = ({
           className={`wall l-d2${
             around.l2 === "1" || (mapData.customWall as any)[around.l2]
               ? ""
+              : around.l3 !== "1" && !(mapData.customWall as any)[around.l3]
+              ? " hide"
               : "-open"
           }`}
         >
@@ -121,6 +141,8 @@ export const GameWindow = ({
           className={`wall l-d3${
             around.l3 === "1" || (mapData.customWall as any)[around.l3]
               ? ""
+              : around.l4 !== "1" && !(mapData.customWall as any)[around.l4]
+              ? " hide"
               : "-open"
           }`}
         >
@@ -131,6 +153,8 @@ export const GameWindow = ({
           className={`wall r-d1${
             around.r1 === "1" || (mapData.customWall as any)[around.r1]
               ? ""
+              : around.r2 !== "1" && !(mapData.customWall as any)[around.r2]
+              ? " hide"
               : "-open"
           }`}
         >
@@ -141,6 +165,8 @@ export const GameWindow = ({
           className={`wall r-d2${
             around.r2 === "1" || (mapData.customWall as any)[around.r2]
               ? ""
+              : around.r3 !== "1" && !(mapData.customWall as any)[around.r3]
+              ? " hide"
               : "-open"
           }`}
         >
@@ -151,6 +177,8 @@ export const GameWindow = ({
           className={`wall r-d3${
             around.r3 === "1" || (mapData.customWall as any)[around.r3]
               ? ""
+              : around.r4 !== "1" && !(mapData.customWall as any)[around.r4]
+              ? " hide"
               : "-open"
           }`}
         >
