@@ -9,10 +9,6 @@ const GoToFrozenCity: ActionEvent = async (
   showMessage,
   setFreeze
 ) => {
-  if (!status.keys.tutorial) {
-    showMessage("外に出る前に、今の状況を把握したいと思った。")
-    return
-  }
   const select = await ask(
     "外に出る？",
     ["出る", "何もしない"],

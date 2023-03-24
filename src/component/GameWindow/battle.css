@@ -1,0 +1,59 @@
+.game-battle {
+  animation: fadeBlur ease-in-out 0.2s;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
+
+  color: black;
+  transform: translateZ(1001px);
+}
+
+.game-battle-title {
+  text-align: center;
+  line-height: calc(var(--tileSize) * 0.25);
+}
+
+.game-battle-status {
+  text-align: center;
+}
+
+.game-battle-main {
+  display: flex;
+}
+
+.game-battle-main-child {
+  flex-grow: 1;
+  height: calc(var(--tileSize) * 1.6 - 20px);
+  width: 100%;
+  margin: 10px;
+}
+.game-battle-main .left {
+  padding-left: calc(var(--tileSize) * 0.05);
+}
+
+.game-battle-main-select {
+  width: calc(var(--tileSize) * 1.2);
+  height: calc(var(--tileSize) * 1.35);
+  margin: 10px;
+  font-size: calc(var(--tileSize) * 0.1);
+  background: rgba(255, 255, 255, 0.3);
+  border: solid 2px black;
+  padding: 10px;
+  outline: none;
+  backdrop-filter: blur(8px);
+}
+.game-battle-main-child .use {
+  margin-top: calc(var(--tileSize) * 0.1);
+  width: calc(var(--tileSize) * 1.3);
+  height: calc(var(--tileSize) * 0.2);
+}
+
+.game-battle-main-monster {
+  display: block;
+  margin-top: calc(var(--tileSize) * 0.1);
+  width: calc(var(--tileSize) * 1.3);
+  height: calc(var(--tileSize) * 0.9);
+  object-fit: contain;
+}

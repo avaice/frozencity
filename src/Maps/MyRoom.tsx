@@ -64,7 +64,7 @@ export const MyRoom: MapType = {
   onEntered: (status, setStatus, showMessage, setFreeze, setBgm) => {
     if (!status.keys.tutorial) {
       showMessage("...目が覚めたら、気味が悪いほど静かだった。")
-    } else {
+    } else if (status.keys.misorori) {
       showMessage("家に帰った。ずっと住んでいる家の香りは安心する。")
       setBgm("shibuya")
     }

@@ -21,7 +21,7 @@ export const statusState = atom<StatusType>({
     weather: "NIGHT",
     items: ["Chocolate", "Chocolate", "Taimatsu"],
     keys: {
-      engine: false,
+      engine: true,
       adminRoom: false,
     },
   },

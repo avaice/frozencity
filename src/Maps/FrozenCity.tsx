@@ -68,6 +68,38 @@ const GoToMyRoom: ActionEvent = async (
   }
 }
 
+const GoToObasan: ActionEvent = async (
+  status,
+  setStatus,
+  showMessage,
+  setFreeze
+) => {
+  const select = await ask(
+    "近所のおばさんの家。",
+    ["入る", "何もしない"],
+    setFreeze,
+    showMessage
+  )
+
+  if (select === "入る") {
+    if (!status.keys.obasan) {
+      showMessage("鍵がかかっていて開かない。")
+      return
+    }
+    setStatus((prev) => ({
+      ...prev,
+      map: "MyRoom",
+      position: {
+        x: 1,
+        y: 2,
+      },
+      direction: "N",
+    }))
+  } else {
+    showMessage("あとでにしようと思った。")
+  }
+}
+
 const GoToStation: ActionEvent = async (
   status,
   setStatus,
@@ -75,6 +107,14 @@ const GoToStation: ActionEvent = async (
   setFreeze
 ) => {
   showMessage("【A STATION】\n家から最寄りの鉄道駅。今は動いていない。")
+}
+const GoToUrayama: ActionEvent = async (
+  status,
+  setStatus,
+  showMessage,
+  setFreeze
+) => {
+  showMessage("【裏山】\n学校の裏にある、小さな山。がれきがあって進めない。")
 }
 
 const EngineToggle: ActionEvent = async (
@@ -171,20 +211,20 @@ export const FrozenCity: MapType = {
   size: 16,
   map: [
     "1111111111111111",
-    "10000000000000G1",
+    "100000000000000G",
     "1011E11101101101",
-    "1H11000001B0D101",
+    "1H11000001B0DL01",
     "1111F111111F1111",
     "1000000000000001",
     "1311111111111111",
     "1000000211111111",
     "1110111111111111",
-    "1110111111111111",
-    "1110111111111111",
-    "1110111111111111",
-    "11A0111111111111",
-    "1110111111111111",
-    "1110111111111111",
+    "111011000000K111",
+    "1110110111111111",
+    "1110110110000111",
+    "11A0110010100111",
+    "1110J00010000111",
+    "11101110I0011111",
     "111C111111111111",
   ],
   customWall: {
@@ -194,6 +234,8 @@ export const FrozenCity: MapType = {
     D: <Door />,
     E: <Door />,
     G: <Door />,
+    K: <Door />,
+    L: <Door />,
   },
   events: {
     "2": "張り紙がある。\n「能力アップのご相談はエンジニアサービスまで！」",
@@ -206,6 +248,10 @@ export const FrozenCity: MapType = {
     F: messageByDirection("住宅街に入った。", "N"),
     G: GoToStation,
     H: "この辺りだけ、空から変な光が差している。",
+    I: messageByDirection("【小学校裏】", "E"),
+    J: messageByDirection("【小学校】", "E"),
+    K: GoToUrayama,
+    L: GoToObasan,
   },
   stepEvent: (status, setStatus, showMessage, setFreeze, setBgm) => {
     // if (status.steps === 1) {

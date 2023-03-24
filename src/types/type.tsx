@@ -44,5 +44,6 @@ export type StatusType = {
     adminRoom?: boolean
     tutorial?: boolean
     misorori?: "初めて再会" | "周りの調査完了" // みそロリと会話をした
+    obasan?: "モンスターから助けた"
   }
 }

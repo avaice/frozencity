@@ -3,6 +3,7 @@ import { useRecoilState } from "recoil"
 import { freezeState, messageState, statusState } from "../../recoilAtoms"
 import { Items, ItemType } from "../../types/itemType"
 import { MapType } from "../../types/mapType"
+import { Battle } from "./Battle"
 import "./gameWindow.css"
 import { Inventory } from "./Inventory"
 
@@ -215,6 +216,8 @@ export const GameWindow = ({
         visible={isVisibleInventory}
         setVisible={setIsVisibleInventory}
       />
+
+      <Battle visible={isVisibleInventory} setVisible={setIsVisibleInventory} />
     </div>
   )
 }

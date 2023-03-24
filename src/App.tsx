@@ -171,7 +171,7 @@ function App() {
     (e: KeyboardEvent) => {
       keyPress(e.code)
     },
-    [status.direction, status.position, freeze]
+    [status.direction, status.position, freeze, status.keys]
   )
 
   useEffect(() => {
@@ -179,7 +179,7 @@ function App() {
     return () => {
       document.removeEventListener("keyup", keyPressEvent)
     }
-  }, [status.direction, status.position, freeze])
+  }, [status.direction, status.position, freeze, status.keys])
 
   useEffect(() => {
     if (status.steps < 0) {
