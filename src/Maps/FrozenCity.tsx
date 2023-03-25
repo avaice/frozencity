@@ -1,5 +1,7 @@
+import { obasanEncountedWithMonster } from "../Events/obasanEncountedWithMonster"
 import { ask } from "../modules/ask"
 import { messageByDirection } from "../modules/messageByDirection"
+import { encountMonster } from "../Monsters/monsterUtils"
 import { MapType } from "../types/mapType"
 import { ActionEvent, StatusType } from "../types/type"
 import { Door, Toggle } from "./Parts/Parts"
@@ -74,18 +76,19 @@ const GoToObasan: ActionEvent = async (
   showMessage,
   setFreeze
 ) => {
+  if (!status.keys.obasan) {
+    showMessage("鍵がかかっていて開かない。")
+    return
+  }
+
   const select = await ask(
-    "近所のおばさんの家。",
+    "おばさんの家。",
     ["入る", "何もしない"],
     setFreeze,
     showMessage
   )
 
   if (select === "入る") {
-    if (!status.keys.obasan) {
-      showMessage("鍵がかかっていて開かない。")
-      return
-    }
     setStatus((prev) => ({
       ...prev,
       map: "MyRoom",
@@ -205,13 +208,59 @@ const GoToEngineer: ActionEvent = async (
   }
 }
 
+const Encount: ActionEvent = (
+  status,
+  setStatus,
+  showMessage,
+  setFreeze,
+  _setBgm,
+  setMonster
+) => {
+  if (!status.keys.canMonsterSpawn) {
+    return
+  }
+  encountMonster("slime", showMessage, setFreeze, setMonster)
+}
+
+const EnterJutakugai: ActionEvent = (
+  status,
+  setStatus,
+  showMessage,
+  setFreeze,
+  setBgm,
+  setMonster
+) => {
+  messageByDirection("住宅街に入った。", "N")(
+    status,
+    setStatus,
+    showMessage,
+    setFreeze,
+    setBgm,
+    setMonster
+  )
+
+  if (status.keys.misorori === "初めて再会" && !status.keys.obasan) {
+    setFreeze(true)
+    showMessage(
+      "プレーヤーが住宅街を出ようとした時、後ろの方から甲高い叫び声がした。"
+    )
+    setStatus((prev) => ({
+      ...prev,
+      keys: { ...prev.keys, obasan: "モンスター撃退イベント" },
+    }))
+    setTimeout(() => {
+      setFreeze(false)
+    }, 2000)
+  }
+}
+
 export const FrozenCity: MapType = {
   type: "OUTDOOR",
   light: false,
   size: 16,
   map: [
     "1111111111111111",
-    "100000000000000G",
+    "10000000000M000G",
     "1011E11101101101",
     "1H11000001B0DL01",
     "1111F111111F1111",
@@ -245,20 +294,26 @@ export const FrozenCity: MapType = {
     C: EngineToggle,
     D: GoToMisorori,
     E: GoToEngineer,
-    F: messageByDirection("住宅街に入った。", "N"),
+    F: EnterJutakugai,
     G: GoToStation,
     H: "この辺りだけ、空から変な光が差している。",
     I: messageByDirection("【小学校裏】", "E"),
     J: messageByDirection("【小学校】", "E"),
     K: GoToUrayama,
     L: GoToObasan,
+    M: obasanEncountedWithMonster,
   },
-  stepEvent: (status, setStatus, showMessage, setFreeze, setBgm) => {
-    // if (status.steps === 1) {
-    //   showMessage(
-    //     "...目が覚めたら気味が悪いほど静か。ここには人はいるのだろうか？"
-    //   )
-    // }
+  stepEvent: (
+    status,
+    setStatus,
+    showMessage,
+    setFreeze,
+    setBgm,
+    setMonster
+  ) => {
+    if (Math.random() > 0.96) {
+      Encount(status, setStatus, showMessage, setFreeze, setBgm, setMonster)
+    }
   },
   onEntered: (status, setStatus, showMessage, setFreeze, setBgm) => {
     if (status.keys.engine) {

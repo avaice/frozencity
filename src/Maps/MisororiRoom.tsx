@@ -46,7 +46,7 @@ const MSRR: ActionEvent = async (status, setStatus, showMessage, setFreeze) => {
     msgs.forEach((v, i) => {
       setTimeout(() => {
         showMessage(v)
-        if (i === 3) {
+        if (i === 4) {
           setFreeze(false)
         }
       }, 2500 * i)
@@ -63,6 +63,25 @@ const MSRR: ActionEvent = async (status, setStatus, showMessage, setFreeze) => {
   switch (status.keys.misorori) {
     case "初めて再会":
       showMessage("幼馴染「みんなのことが心配だよ。無事にしてるかな...？」")
+      return
+    case "周りの調査完了":
+      setTimeout(() => {
+        showMessage("幼馴染に、おばさんをモンスターから助けたことを話した。")
+        setTimeout(() => {
+          showMessage(
+            "幼馴染「その人、私の家の裏に住んでるおばさんだよ！！無事だったんだね、よかった」"
+          )
+          setTimeout(() => {
+            showMessage(
+              "幼馴染「一つ隣の通りに行けば家があるから、行ってみるといいかもね」"
+            )
+            setStatus((prev) => ({
+              ...prev,
+              keys: { ...prev.keys, isShopOpened: true },
+            }))
+          }, 1000)
+        }, 1000)
+      }, 1000)
       return
   }
 }

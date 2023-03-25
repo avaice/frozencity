@@ -32,7 +32,7 @@ export const Inventory = ({
       <div>
         <p className="game-inventory-status">
           Lv:{status.level} Health:{status.health}/{status.maxHealth} Magical:
-          {status.magical}
+          {status.magical} Money:{status.money}G
         </p>
       </div>
       <div className="game-inventory-items">

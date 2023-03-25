@@ -1,4 +1,6 @@
 import { atom } from "recoil"
+import { magicals } from "./magicals"
+import { Monster } from "./Monsters/monsterUtils"
 import { StatusType } from "./types/type"
 
 export const statusState = atom<StatusType>({
@@ -12,8 +14,8 @@ export const statusState = atom<StatusType>({
     direction: "N",
     exp: 0,
     money: 0,
-    health: 10,
-    maxHealth: 10,
+    health: 15,
+    maxHealth: 15,
     magical: 0,
     level: 1,
     light: 0,
@@ -21,9 +23,11 @@ export const statusState = atom<StatusType>({
     weather: "NIGHT",
     items: ["Chocolate", "Chocolate", "Taimatsu"],
     keys: {
-      engine: true,
+      canMonsterSpawn: false,
+      engine: false,
       adminRoom: false,
     },
+    magicals: ["reiki"],
   },
 })
 export const freezeState = atom<boolean>({
@@ -33,4 +37,9 @@ export const freezeState = atom<boolean>({
 export const messageState = atom<string>({
   key: "messageState",
   default: "",
+})
+
+export const monsterState = atom<Monster | undefined>({
+  key: "monsterState",
+  default: undefined,
 })

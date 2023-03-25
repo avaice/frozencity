@@ -87,6 +87,10 @@ main {
   background-color: rgb(66, 67, 134);
 }
 
+.night img {
+  filter: invert(1);
+}
+
 .controller {
   display: none;
   height: 100px;
@@ -124,7 +128,7 @@ main {
 }
 
 .debug {
-  display: none;
+  /* display: none; */
   position: absolute;
   top: 10px;
   left: 10px;

@@ -1,9 +1,12 @@
+import { SetterOrUpdater } from "recoil"
+import { MagicList } from "../magicals"
 import { AdminRoom } from "../Maps/AdminRoom"
 import { FrozenCity } from "../Maps/FrozenCity"
 import { MisororiRoom } from "../Maps/MisororiRoom"
 import { MyRoom } from "../Maps/MyRoom"
 import { Title } from "../Maps/Title"
 import { BGMType } from "../modules/useBgm"
+import { Monster } from "../Monsters/monsterUtils"
 import { ItemType } from "./itemType"
 
 export const maps = {
@@ -19,7 +22,8 @@ export type ActionEvent = (
   setStatus: React.Dispatch<React.SetStateAction<StatusType>>,
   showMessage: (msg: string) => void,
   setFreeze: React.Dispatch<React.SetStateAction<boolean>>,
-  setBgm: React.Dispatch<React.SetStateAction<BGMType | undefined>>
+  setBgm: React.Dispatch<React.SetStateAction<BGMType | undefined>>,
+  setMonster: SetterOrUpdater<Monster | undefined>
 ) => void
 
 export type DirectionType = "N" | "E" | "W" | "S"
@@ -39,11 +43,14 @@ export type StatusType = {
   weather: "DAY" | "RAINY" | "NIGHT" | "LIGHT" // 天気
   items: ItemType[]
   keys: {
+    canMonsterSpawn: boolean // モンスターがスポーンするか
     engine: boolean // 町の稼動装置
     isThawedEngineer?: boolean // エンジニアを目覚めさせた
+    isShopOpened?: boolean // おばさんの商店が空いているか
     adminRoom?: boolean
     tutorial?: boolean
     misorori?: "初めて再会" | "周りの調査完了" // みそロリと会話をした
-    obasan?: "モンスターから助けた"
+    obasan?: "モンスター撃退イベント" | "モンスターから助けた"
   }
+  magicals: MagicList[]
 }

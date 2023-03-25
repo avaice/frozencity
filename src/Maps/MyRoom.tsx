@@ -1,4 +1,5 @@
 import { ask } from "../modules/ask"
+import { encountMonster } from "../Monsters/monsterUtils"
 import { MapType } from "../types/mapType"
 import { ActionEvent, StatusType } from "../types/type"
 import { Door } from "./Parts/Parts"
@@ -48,15 +49,27 @@ const Tutorial: ActionEvent = async (
   setStatus((prev) => ({ ...prev, keys: { ...prev.keys, tutorial: true } }))
 }
 
+const EncountSlime: ActionEvent = (
+  status,
+  setStatus,
+  showMessage,
+  setFreeze,
+  _setBgm,
+  setMonster
+) => {
+  encountMonster("slime", showMessage, setFreeze, setMonster)
+}
+
 export const MyRoom: MapType = {
   type: "INDOOR",
   light: true,
   size: 4,
-  map: ["1111", "1111", "10B1", "1A11"],
+  map: ["1C11", "1111", "10B1", "1A11"],
   customWall: {
     A: <Door />,
   },
   events: {
+    C: EncountSlime,
     B: Tutorial,
     A: GoToFrozenCity,
   },

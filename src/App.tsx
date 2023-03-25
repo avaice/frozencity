@@ -2,8 +2,14 @@ import { useCallback, useEffect, useRef, useState } from "react"
 import { useRecoilState } from "recoil"
 import "./App.css"
 import { GameWindow } from "./component/GameWindow"
+import { cleared_obasanEncountedWithMonster } from "./Events/obasanEncountedWithMonster"
 import { useBgm } from "./modules/useBgm"
-import { freezeState, messageState, statusState } from "./recoilAtoms"
+import {
+  freezeState,
+  messageState,
+  monsterState,
+  statusState,
+} from "./recoilAtoms"
 import { ActionEvent, maps, StatusType } from "./types/type"
 
 export const MSG_SPEED = 200
@@ -22,6 +28,15 @@ function App() {
 
   const gameWindowRef = useRef<HTMLDivElement>(null)
   const messageWindowRef = useRef<HTMLDivElement>(null)
+
+  const [monster, setMonster] = useRecoilState(monsterState)
+
+  useEffect(() => {
+    setFreeze(!!monster)
+    if (!monster) {
+      checkBattleAfterEvent()
+    }
+  }, [monster])
 
   useEffect(() => {
     setShowingMessage((prev) => `${prev}\n\n${message}`)
@@ -46,7 +61,8 @@ function App() {
       setStatus,
       showMessage,
       setFreeze,
-      setBgm
+      setBgm,
+      setMonster
     )
   }, [status.map])
 
@@ -63,7 +79,8 @@ function App() {
       setStatus,
       showMessage,
       setFreeze,
-      setBgm
+      setBgm,
+      setMonster
     )
     if (status.light === 1) {
       showMessage("たいまつが切れた。")
@@ -75,13 +92,26 @@ function App() {
     }))
   }, [status.position])
 
+  const checkBattleAfterEvent = () => {
+    if (status.keys.obasan === "モンスター撃退イベント") {
+      cleared_obasanEncountedWithMonster(
+        status,
+        setStatus,
+        showMessage,
+        setFreeze,
+        setBgm,
+        setMonster
+      )
+    }
+  }
+
   const checkAndFireEvent = (key: string) => {
     const msg: string | ActionEvent = (events as any)[key]
     if (msg) {
       if (typeof msg === "string") {
         showMessage(msg)
       } else {
-        msg(status, setStatus, showMessage, setFreeze, setBgm)
+        msg(status, setStatus, showMessage, setFreeze, setBgm, setMonster)
       }
     }
   }

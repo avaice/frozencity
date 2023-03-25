@@ -1,22 +1,30 @@
 import { useRef, useState, useEffect } from "react"
 import { useRecoilState } from "recoil"
-import { statusState, messageState, freezeState } from "../../recoilAtoms"
+import { magicals, MagicList } from "../../magicals"
+import { useBgm } from "../../modules/useBgm"
+import { withMargin } from "../../modules/withMargin"
+import {
+  statusState,
+  messageState,
+  monsterState,
+  freezeState,
+} from "../../recoilAtoms"
 import { ItemType, Items } from "../../types/itemType"
 import "./battle.css"
 
-export const Battle = ({
-  visible,
-  setVisible,
-}: {
-  visible: boolean
-  setVisible: React.Dispatch<React.SetStateAction<boolean>>
-}) => {
+type BattleCommands = "attack" | "kaiwa" | "nigeru" | MagicList
+
+export const Battle = ({ visible }: { visible: boolean }) => {
   const selectRef = useRef<HTMLSelectElement>(null)
+  const [freeze, setFreeze] = useRecoilState(freezeState) // 入力を受け付けなくするか
+  const { currentBgm, setBgm, isInitializedBgm, InitializeBgm } = useBgm()
+
   const [status, setStatus] = useRecoilState(statusState)
   const [message, showMessage] = useRecoilState(messageState)
-  const [freeze, setFreeze] = useRecoilState(freezeState) // 入力を受け付けなくするか
+  const [isMyTurn, setIsMyTurn] = useState(true)
+  const [monster, setMonster] = useRecoilState(monsterState)
 
-  const [selecting, setSelecting] = useState<ItemType | undefined>()
+  const [selecting, setSelecting] = useState<BattleCommands | undefined>()
   useEffect(() => {
     if (selectRef.current) {
       selectRef.current.focus()
@@ -24,8 +32,134 @@ export const Battle = ({
     setSelecting(undefined)
   }, [visible])
 
+  useEffect(() => {
+    if (!monster) {
+      setIsMyTurn(true)
+    }
+  }, [monster])
+
+  const turn = async () => {
+    if (!isMyTurn || !selecting) {
+      return
+    }
+    if (!monster) {
+      return alert(
+        "ERROR: モンスターと戦っていない状態で攻撃イベントが呼び出されました。"
+      )
+    }
+    const attack = () =>
+      new Promise<number>((resolve) => {
+        showMessage("プレーヤーの攻撃！")
+        setTimeout(() => {
+          const dmg = withMargin(status.level + 3, 3)
+          if (dmg === 0) {
+            showMessage("攻撃は命中しなかった。")
+          } else {
+            setMonster((prev) => {
+              if (!prev) {
+                return undefined
+              }
+              return { ...prev, health: Math.max(0, prev.health - dmg) }
+            })
+            showMessage(`${monster.name}に${dmg}のダメージを与えた！`)
+          }
+          setTimeout(() => {
+            resolve(dmg)
+          }, 1000)
+        }, 500)
+      })
+
+    const nigeru = () =>
+      new Promise<boolean>((resolve) => {
+        const exitNotAllowed = status.keys.obasan === "モンスター撃退イベント"
+        showMessage("プレーヤーは逃亡を試みた！")
+        setTimeout(() => {
+          if (Math.random() > monster.escapeChance || exitNotAllowed) {
+            showMessage("逃亡に失敗した！")
+            resolve(false)
+          } else {
+            showMessage(`プレーヤーは${monster.name}から逃げた。`)
+            setMonster(undefined)
+            resolve(true)
+          }
+        }, 500)
+      })
+    const kaiwa = () =>
+      new Promise<boolean>((resolve) => {
+        showMessage(`プレーヤーは${monster.name}に話しかけた。`)
+        setTimeout(() => {
+          if (!monster.kaiwa) {
+            showMessage(`${monster.name}には言葉が通じないようだ！`)
+            setTimeout(() => {
+              resolve(false)
+            }, 500)
+          } else {
+            showMessage(`プレーヤーは${monster.name}と話し合って、和解した。`)
+            setMonster(undefined)
+            resolve(true)
+          }
+        }, 500)
+      })
+    setIsMyTurn(false)
+    switch (selecting) {
+      case "attack":
+        const dmg = await attack()
+        if (monster.health - dmg <= 0) {
+          setStatus((prev) => ({
+            ...prev,
+            money: monster.money ? prev.money + monster.money : prev.money,
+            exp: prev.exp + monster.exp,
+          }))
+          showMessage(
+            `${monster.name}を倒した！\n経験値:${monster.exp}${
+              monster.money && `と${monster.money}Gを得た。`
+            }`
+          )
+          setTimeout(() => {
+            setMonster(undefined)
+          }, 2000)
+          return
+        }
+        break
+      case "nigeru":
+        if (await nigeru()) {
+          return
+        }
+        break
+      case "kaiwa":
+        if (await kaiwa()) {
+          return
+        }
+        break
+    }
+
+    showMessage(`${monster.name}の攻撃！`)
+    setTimeout(() => {
+      const getDmg = monster.attack(
+        status,
+        setStatus,
+        showMessage,
+        setFreeze,
+        setBgm,
+        setMonster
+      )
+      setTimeout(() => {
+        if (status.health - getDmg <= 0) {
+          showMessage(
+            "プレーヤーは力尽きた...\n【GAME OVER】5秒後にタイトルへ戻ります..."
+          )
+          setTimeout(() => {
+            window.location.reload()
+          }, 5000)
+        } else {
+          setIsMyTurn(true)
+        }
+      }, 1000)
+    }, 1000)
+  }
+
   if (!visible) {
-    // return null
+    return null
   }
   return (
     <div className="game-battle">
@@ -41,9 +175,11 @@ export const Battle = ({
           <h3>Monster</h3>
           <img
             className={"game-battle-main-monster"}
-            src="./images/monster.png"
+            src={monster ? "./images/" + monster.image : ""}
           ></img>
-          <button className="use">選択(Enter)</button>
+          <button className="use" onClick={() => turn()}>
+            選択(Enter)
+          </button>
         </div>
 
         <div className="game-battle-main-child right">
@@ -52,39 +188,29 @@ export const Battle = ({
             className="game-battle-main-select"
             name="area"
             size={8}
-            // onChange={(e) => {
-            //   setSelecting(e.target.value as ItemType)
-            // }}
-            // onKeyUp={(e) => {
-            //   if (e.code === "Enter" && selecting) {
-            //     Items[selecting].action(
-            //       status,
-            //       setStatus,
-            //       showMessage,
-            //       setFreeze
-            //     )
-            //     setSelecting(undefined)
-            //     setVisible(false)
-            //     setFreeze(false)
-            //   }
-            // }}
+            disabled={!isMyTurn}
+            onChange={(e) => {
+              setSelecting(e.target.value as BattleCommands)
+            }}
+            onKeyUp={(e) => {
+              if (e.code === "Enter") {
+                turn()
+              }
+            }}
           >
-            {/* {status.items.map((v, i) => (
-              <option key={`${v}-${i}`} value={`${v}`}>
-                {Items[v].name}
-              </option>
-            ))} */}
-
             <optgroup label="通常攻撃">
               <option value="attack">殴る</option>
             </optgroup>
             <optgroup label="魔法">
-              <option value="magical-1">冷気</option>
-              <option value="magical-1">お祓い</option>
+              {status.magicals.map((v, i) => (
+                <option key={`${v}-${i}`} value={`${v}`}>
+                  {magicals[v].name}
+                </option>
+              ))}
             </optgroup>
             <optgroup label="その他">
-              <option value="magical-1">会話を試みる</option>
-              <option value="magical-1">逃げる</option>
+              <option value="kaiwa">会話を試みる</option>
+              <option value="nigeru">逃げる</option>
             </optgroup>
           </select>
         </div>
