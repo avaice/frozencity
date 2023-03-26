@@ -1,22 +1,20 @@
-import { deleteItem } from "../modules/deleteItem"
 import { Item } from "../types/itemType"
 import { StatusType } from "../types/type"
 
-export const Taimatsu: Item = {
-  name: "たいまつ",
-  description: "市販品のたいまつ。一定の期間、暗闇を照らすことができる。",
-  resell: 2,
+export const Debugger: Item = {
+  name: "デバッグ端末",
+  description: "Frozen Cityの創造主が落とした端末。",
+  resell: 0,
   action: (
     status: StatusType,
     setStatus: React.Dispatch<React.SetStateAction<StatusType>>,
     showMessage: (msg: string) => void,
     setFreeze: React.Dispatch<React.SetStateAction<boolean>>
   ) => {
-    showMessage("たいまつに火を灯した。")
+    showMessage("デバッグ端末を操作した。")
     setStatus((prev) => ({
       ...prev,
-      light: 32,
+      debug: !prev.debug,
     }))
-    deleteItem("Taimatsu", status, setStatus)
   },
 }

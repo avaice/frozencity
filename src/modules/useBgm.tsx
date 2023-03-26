@@ -7,11 +7,16 @@ const BGM_SRC = {
   msrr: "./sounds/msrr.mp3",
   cheezecake: "./sounds/cheezecake.mp3",
   huyuice: "./sounds/huyuice.mp3",
+  obasan: "./sounds/obasan.mp3",
 }
 
 export type BGMType = keyof typeof BGM_SRC
 export const useBgm = () => {
-  const [currentBgm, setBgm] = useState<BGMType>()
+  const [currentBgm, setBgm] = useState<BGMType | undefined>()
+  const [loadStatus, setLoadStatus] = useState<number[]>([
+    0,
+    Object.keys(BGM_SRC).length,
+  ])
   const [isInitializedBgm, InitializeBgm] = useState<boolean | "NOBGM">(false)
   const audio = useRef(new Map<BGMType, HTMLAudioElement>())
 
@@ -25,19 +30,18 @@ export const useBgm = () => {
       newAudio.src = BGM_SRC[v]
       newAudio.loop = true
       newAudio.volume = 0
+      newAudio.onloadeddata = () => {
+        setLoadStatus((prev) => [prev[0] + 1, prev[1]])
+      }
       audio.current.set(v, newAudio)
     })
   }, [isInitializedBgm])
 
   useEffect(() => {
-    if (!currentBgm) {
-      return
+    const b = currentBgm ? audio.current.get(currentBgm) : undefined
+    if (b) {
+      b.currentTime = 0
     }
-    const b = audio.current.get(currentBgm)
-    if (!b) {
-      return
-    }
-    b.currentTime = 0
 
     // iOSはゴミだからボリューム調整ができない
     if (navigator.userAgent.match(/iPhone|iPad/)) {
@@ -57,15 +61,16 @@ export const useBgm = () => {
             }
           })
 
-          if (b.volume < 1) {
+          if (b && b.volume < 1) {
             b.volume = Math.min(1, b.volume + 0.05)
           }
         }, 100 * i)
       }
     }
-
-    b.play()
+    if (b) {
+      b.play()
+    }
   }, [currentBgm])
 
-  return { currentBgm, setBgm, isInitializedBgm, InitializeBgm }
+  return { currentBgm, setBgm, isInitializedBgm, InitializeBgm, loadStatus }
 }

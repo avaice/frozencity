@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from "react"
 import { useRecoilState } from "recoil"
 import "./App.css"
 import { GameWindow } from "./component/GameWindow"
+import { cleared_MisororiMonsterEvent } from "./Events/misororiEncountedCow"
 import { cleared_obasanEncountedWithMonster } from "./Events/obasanEncountedWithMonster"
 import { useBgm } from "./modules/useBgm"
 import {
@@ -15,11 +16,15 @@ import { ActionEvent, maps, StatusType } from "./types/type"
 export const MSG_SPEED = 200
 
 function App() {
+  const [gameState, setGameState] = useState<
+    "askUseSound" | "loading" | "loaded" | "title" | "game"
+  >("askUseSound")
   const [freeze, setFreeze] = useRecoilState(freezeState) // 入力を受け付けなくするか
   const [status, setStatus] = useRecoilState(statusState)
   const [showingMessage, setShowingMessage] = useState("")
   const [message, showMessage] = useRecoilState(messageState)
-  const { currentBgm, setBgm, isInitializedBgm, InitializeBgm } = useBgm()
+  const { currentBgm, setBgm, isInitializedBgm, InitializeBgm, loadStatus } =
+    useBgm()
 
   const mapData = maps[status.map]
   const map = maps[status.map].map
@@ -53,6 +58,15 @@ function App() {
       messageWindowRef.current.scrollTop = messageWindowRef.current.scrollHeight
     }
   }, [showingMessage])
+
+  useEffect(() => {
+    if (loadStatus[0] === loadStatus[1] && gameState === "loading") {
+      setTimeout(() => {
+        setGameState("title")
+        setBgm("opening")
+      }, 3000)
+    }
+  }, [loadStatus])
 
   // マップが変わった時のイベント
   useEffect(() => {
@@ -95,6 +109,16 @@ function App() {
   const checkBattleAfterEvent = () => {
     if (status.keys.obasan === "モンスター撃退イベント") {
       cleared_obasanEncountedWithMonster(
+        status,
+        setStatus,
+        showMessage,
+        setFreeze,
+        setBgm,
+        setMonster
+      )
+    }
+    if (status.keys.misorori === "モンスター撃退イベントMSRR版_バトル中") {
+      cleared_MisororiMonsterEvent(
         status,
         setStatus,
         showMessage,
@@ -217,41 +241,88 @@ function App() {
     }
   }, [])
 
-  if (!isInitializedBgm) {
+  if (gameState === "askUseSound") {
     return (
-      <div className="title">
+      <div className="load-window black">
         <div>
-          <p>Frozen City</p>
+          <p>サウンドを有効にしますか？</p>
           <button
             onClick={() => {
-              InitializeBgm(true)
-              setStatus((prev) => ({ ...prev, map: "MyRoom" }))
+              setTimeout(() => {
+                InitializeBgm(true)
+              }, 1000)
+              setGameState("loading")
             }}
           >
-            サウンドありで冒険を始める
+            はい
           </button>
           <button
             onClick={() => {
               InitializeBgm("NOBGM")
-              setStatus((prev) => ({ ...prev, map: "MyRoom" }))
+              setGameState("title")
             }}
           >
-            サウンドなしで冒険を始める
+            いいえ
           </button>
-          <button
-            className="delete-savedata"
-            onClick={() => {
-              if (
-                window.confirm(
-                  "冒険の記録が本当に消えてしまいますがよろしいですか？"
-                )
-              ) {
-                alert("セーブデータを削除しました。")
-              }
-            }}
-          >
-            冒険の記録を消す
-          </button>
+        </div>
+      </div>
+    )
+  }
+
+  if (gameState === "loading") {
+    return (
+      <div className="load-window fadeIn">
+        <div
+          className={loadStatus[0] === loadStatus[1] ? "fadeOut" : undefined}
+        >
+          <img className="logo-img" src="./logo_mini.png" />
+          <p>
+            {loadStatus[0] === loadStatus[1]
+              ? "(C)2023 avaice"
+              : `Loading resources... (${loadStatus[0]}/${loadStatus[1]})`}
+          </p>
+        </div>
+      </div>
+    )
+  }
+
+  if (gameState === "title") {
+    return (
+      <div className="load-window">
+        <div className="title fadeIn">
+          <p>Frozen City</p>
+          <div>
+            <button
+              onClick={() => {
+                const savedata = localStorage.getItem("frozen-city-save-data")
+                if (savedata) {
+                  setStatus(JSON.parse(savedata))
+                } else {
+                  setStatus((prev) => ({ ...prev, map: "MyRoom" }))
+                }
+
+                setGameState("game")
+                setBgm(undefined)
+              }}
+            >
+              冒険を始める
+            </button>
+
+            {/* <button
+              className="delete-savedata"
+              onClick={() => {
+                if (
+                  window.confirm(
+                    "冒険の記録が本当に消えてしまいますがよろしいですか？"
+                  )
+                ) {
+                  alert("セーブデータを削除しました。")
+                }
+              }}
+            >
+              冒険の記録を消す
+            </button> */}
+          </div>
         </div>
       </div>
     )
@@ -299,11 +370,12 @@ function App() {
           <button className="mini">Esc</button>
         </div>
       </main>
-      <div className="debug">
-        <p>Debug:</p>
-        <p>{JSON.stringify(status)}</p>
-      </div>
-      <audio src="./"></audio>
+      {status.debug && (
+        <div className="debug">
+          <p>Debug:</p>
+          <p>{JSON.stringify(status)}</p>
+        </div>
+      )}
     </div>
   )
 }

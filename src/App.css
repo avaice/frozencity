@@ -3,7 +3,11 @@
   padding: 0;
 }
 
-.title {
+body {
+  background-color: black;
+}
+
+.load-window {
   position: relative;
   height: 100vh;
   width: 100vw;
@@ -14,43 +18,43 @@
   align-items: center;
 }
 
-@keyframes glow {
-  0% {
-    text-shadow: 0 0 0 skyblue;
-  }
-  50% {
-    text-shadow: 0 0 20px skyblue;
-  }
-  1000% {
-    text-shadow: 0 0 0 skyblue;
-  }
-}
-.title > div {
+.load-window > div {
   width: 300px;
 }
-.title > div > p {
+.load-window p {
+  text-align: center;
+  margin: 30px 0;
+}
+.load-window .logo-img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 633/120;
+}
+.title {
   animation: glow 5s ease-in-out infinite;
   text-align: center;
   font-size: 48px;
   line-height: 120px;
   font-weight: bold;
 }
-.title > div > button {
-  transition: box-shadow 0.2s;
+.load-window > div button {
+  transition: box-shadow 0.5s;
   border: none;
   color: black;
   background-color: white;
   font-weight: bold;
   font-size: 14px;
-  width: 100%;
+  width: calc(100% - 10px);
   margin: 5px;
   height: 50px;
 }
-.title > div > button:focus {
+.load-window button:focus,
+.load-window button:hover {
+  cursor: pointer;
   outline: none;
   box-shadow: 0 0 20px white;
 }
-.title > div > .delete-savedata {
+.load-window > div > .delete-savedata {
   height: 30px;
   color: red;
 }
@@ -138,11 +142,46 @@ main {
   background-color: white;
 }
 
+.fadeIn {
+  animation: fadeIn 2s;
+}
+.fadeOut {
+  opacity: 0;
+  animation: fadeIn 2s reverse;
+}
+.blur {
+  background-color: transparent;
+  backdrop-filter: blur(10px);
+}
+.black {
+  background-color: black;
+}
 @media screen and (max-width: 650px) {
   .controller {
     display: block;
   }
   .message {
     font-size: 12px;
+  }
+}
+
+@keyframes glow {
+  0% {
+    text-shadow: 0 0 0 skyblue;
+  }
+  50% {
+    text-shadow: 0 0 20px skyblue;
+  }
+  1000% {
+    text-shadow: 0 0 0 skyblue;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0.01;
+  }
+  to {
+    opacity: 1;
   }
 }

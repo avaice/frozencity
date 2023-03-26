@@ -11,6 +11,7 @@ import { MapType } from "../../types/mapType"
 import { Battle } from "./Battle"
 import "./gameWindow.css"
 import { Inventory } from "./Inventory"
+import { Shop } from "./Shop"
 
 export const GameWindow = ({
   mapData,
@@ -212,7 +213,8 @@ export const GameWindow = ({
         )}
       </div>
       <div className="game-status">
-        <p>{status.map}</p>
+        {/* <p>{status.map}</p> */}
+        <p>Esc: Inventory</p>
         <p>
           x= {position.x} y= {position.y}
         </p>
@@ -222,6 +224,8 @@ export const GameWindow = ({
         visible={isVisibleInventory}
         setVisible={setIsVisibleInventory}
       />
+
+      <Shop visible={status.map === "ObasanRoom" || status.map === "Kajiya"} />
 
       <Battle visible={!!monster} />
     </div>

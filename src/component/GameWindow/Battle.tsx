@@ -38,6 +38,12 @@ export const Battle = ({ visible }: { visible: boolean }) => {
     }
   }, [monster])
 
+  useEffect(() => {
+    if (isMyTurn && selectRef.current) {
+      selectRef.current.focus()
+    }
+  }, [isMyTurn])
+
   const turn = async () => {
     if (!isMyTurn || !selecting) {
       return
@@ -47,11 +53,13 @@ export const Battle = ({ visible }: { visible: boolean }) => {
         "ERROR: モンスターと戦っていない状態で攻撃イベントが呼び出されました。"
       )
     }
+
     const attack = () =>
       new Promise<number>((resolve) => {
         showMessage("プレーヤーの攻撃！")
         setTimeout(() => {
-          const dmg = withMargin(status.level + 3, 3)
+          const sword = Items[status.equipments.sword].equip
+          const dmg = withMargin(status.level + (sword ? sword.power : 0), 3)
           if (dmg === 0) {
             showMessage("攻撃は命中しなかった。")
           } else {
@@ -71,7 +79,9 @@ export const Battle = ({ visible }: { visible: boolean }) => {
 
     const nigeru = () =>
       new Promise<boolean>((resolve) => {
-        const exitNotAllowed = status.keys.obasan === "モンスター撃退イベント"
+        const exitNotAllowed =
+          status.keys.obasan === "モンスター撃退イベント" ||
+          status.keys.misorori === "モンスター撃退イベントMSRR版_進行中"
         showMessage("プレーヤーは逃亡を試みた！")
         setTimeout(() => {
           if (Math.random() > monster.escapeChance || exitNotAllowed) {
@@ -111,9 +121,9 @@ export const Battle = ({ visible }: { visible: boolean }) => {
             exp: prev.exp + monster.exp,
           }))
           showMessage(
-            `${monster.name}を倒した！\n経験値:${monster.exp}${
-              monster.money && `と${monster.money}Gを得た。`
-            }`
+            `${monster.name}を倒した！\n${monster.exp}経験値${
+              monster.money && `と${monster.money}G`
+            }を得た。`
           )
           setTimeout(() => {
             setMonster(undefined)
@@ -155,7 +165,7 @@ export const Battle = ({ visible }: { visible: boolean }) => {
           setIsMyTurn(true)
         }
       }, 1000)
-    }, 1000)
+    }, 500)
   }
 
   if (!visible) {

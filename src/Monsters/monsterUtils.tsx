@@ -1,9 +1,12 @@
 import { SetterOrUpdater, useRecoilState } from "recoil"
 import { BGMType } from "../modules/useBgm"
 import { monsterState } from "../recoilAtoms"
-import { ItemType } from "../types/itemType"
+import { Items, ItemType } from "../types/itemType"
 import { ActionEvent, StatusType } from "../types/type"
-import { slimeMonster } from "./MonsterComponent/slime"
+import { CowMonster } from "./MonsterComponent/cow"
+import { DarkGiantMonster } from "./MonsterComponent/darkGiant"
+import { GiantMonster } from "./MonsterComponent/giant"
+import { SlimeMonster } from "./MonsterComponent/slime"
 
 export type Monster = {
   image: string
@@ -25,16 +28,23 @@ export type Monster = {
 }
 
 const monsters = {
-  slime: slimeMonster,
+  slime: SlimeMonster,
+  giant: GiantMonster,
+  darkGiant: DarkGiantMonster,
+  cow: CowMonster,
 }
 
-export const monsterAttack = async (
+export const monsterAttack = (
   power: number,
+  status: StatusType,
   setStatus: React.Dispatch<React.SetStateAction<StatusType>>,
   showMessage: (msg: string) => void
-) => {
-  showMessage(`プレーヤーは${power}ダメージを受けた！`)
-  setStatus((prev) => ({ ...prev, health: Math.max(prev.health - power, 0) }))
+): number => {
+  const shield = Items[status.equipments.shield].equip
+  const dmg = Math.max(0, power - (shield ? shield.power : 0))
+  showMessage(`プレーヤーは${dmg}ダメージを受けた！`)
+  setStatus((prev) => ({ ...prev, health: Math.max(prev.health - dmg, 0) }))
+  return dmg
 }
 
 export const encountMonster = (

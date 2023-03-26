@@ -2,21 +2,23 @@ import { deleteItem } from "../modules/deleteItem"
 import { Item } from "../types/itemType"
 import { StatusType } from "../types/type"
 
-export const Taimatsu: Item = {
-  name: "たいまつ",
-  description: "市販品のたいまつ。一定の期間、暗闇を照らすことができる。",
-  resell: 2,
+export const Beef: Item = {
+  name: "牛肉",
+  description: "調理されていない、生の牛肉。",
+  resell: 0,
   action: (
     status: StatusType,
     setStatus: React.Dispatch<React.SetStateAction<StatusType>>,
     showMessage: (msg: string) => void,
     setFreeze: React.Dispatch<React.SetStateAction<boolean>>
   ) => {
-    showMessage("たいまつに火を灯した。")
+    showMessage(
+      "生のまま牛肉を食べた。お腹が痛くなってきた。\n調理してから食べた方が良かったと後悔した。\n体力が減った。。"
+    )
     setStatus((prev) => ({
       ...prev,
-      light: 32,
+      health: Math.max(1, prev.health - 30),
     }))
-    deleteItem("Taimatsu", status, setStatus)
+    deleteItem("Beef", status, setStatus)
   },
 }

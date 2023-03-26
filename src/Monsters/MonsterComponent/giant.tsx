@@ -1,15 +1,16 @@
 import { withMargin } from "../../modules/withMargin"
 import { Monster, monsterAttack } from "../monsterUtils"
 
-export const SlimeMonster: Monster = {
-  name: "スライム",
+export const GiantMonster: Monster = {
+  name: "ジャイアント",
   image: "monster.png",
-  health: 5,
-  money: 2,
-  exp: 2,
+  health: 15,
+  money: 5,
+  exp: 4,
   attack: (status, setStatus, showMessage, setFreeze): number => {
-    const dmg = withMargin(4, 1)
+    const dmg = withMargin(4, 6)
+
     return monsterAttack(dmg, status, setStatus, showMessage)
   },
-  escapeChance: 0.9,
+  escapeChance: 0.8,
 }

@@ -1,3 +1,4 @@
+import { MisororiMonsterEvent } from "../Events/misororiEncountedCow"
 import { obasanEncountedWithMonster } from "../Events/obasanEncountedWithMonster"
 import { ask } from "../modules/ask"
 import { messageByDirection } from "../modules/messageByDirection"
@@ -76,13 +77,13 @@ const GoToObasan: ActionEvent = async (
   showMessage,
   setFreeze
 ) => {
-  if (!status.keys.obasan) {
+  if (!status.keys.obasan || !status.keys.isShopOpened) {
     showMessage("鍵がかかっていて開かない。")
     return
   }
 
   const select = await ask(
-    "おばさんの家。",
+    "おばさんの店。",
     ["入る", "何もしない"],
     setFreeze,
     showMessage
@@ -91,7 +92,7 @@ const GoToObasan: ActionEvent = async (
   if (select === "入る") {
     setStatus((prev) => ({
       ...prev,
-      map: "MyRoom",
+      map: "ObasanRoom",
       position: {
         x: 1,
         y: 2,
@@ -137,6 +138,11 @@ const EngineToggle: ActionEvent = async (
     showMessage
   )
 
+  if (status.keys.misorori === "モンスター撃退イベントMSRR版_進行中") {
+    showMessage("今は他にやるべきことがある気がした。")
+    return
+  }
+
   if (select === "電源を入れる") {
     showMessage(
       "電源ボタンを押したと同時に、街は明るくなり、機械の動く無機質な音が響き渡った。"
@@ -160,7 +166,7 @@ const GoToMisorori: ActionEvent = async (
   setFreeze
 ) => {
   const select = await ask(
-    "幼馴染の家。よく家族で集まって食事をした。",
+    "向かいの家。同い年の子がいるのでよく家族で集まって食事をしたが、その子の名前が思い出せない。",
     ["入る", "何もしない"],
     setFreeze,
     showMessage
@@ -182,6 +188,38 @@ const GoToMisorori: ActionEvent = async (
     }))
   } else {
     showMessage("会うのはまた今度にしようと思った。")
+  }
+}
+
+const GoToKajiya: ActionEvent = async (
+  status,
+  setStatus,
+  showMessage,
+  setFreeze
+) => {
+  const select = await ask(
+    "【町鍛治スミス】",
+    ["入る", "何もしない"],
+    setFreeze,
+    showMessage
+  )
+
+  if (select === "入る") {
+    if (!status.keys.isShopOpened) {
+      showMessage("鍵がかかっていて開かない。")
+      return
+    }
+    setStatus((prev) => ({
+      ...prev,
+      map: "Kajiya",
+      position: {
+        x: 1,
+        y: 2,
+      },
+      direction: "N",
+    }))
+  } else {
+    showMessage("また今度にしようと思った。")
   }
 }
 
@@ -219,7 +257,12 @@ const Encount: ActionEvent = (
   if (!status.keys.canMonsterSpawn) {
     return
   }
-  encountMonster("slime", showMessage, setFreeze, setMonster)
+  const num = Math.floor(Math.random() * 15)
+  if (num < 4) {
+    encountMonster("giant", showMessage, setFreeze, setMonster)
+  } else {
+    encountMonster("slime", showMessage, setFreeze, setMonster)
+  }
 }
 
 const EnterJutakugai: ActionEvent = (
@@ -254,23 +297,63 @@ const EnterJutakugai: ActionEvent = (
   }
 }
 
+const EnterElementarySchool: ActionEvent = (
+  status,
+  setStatus,
+  showMessage,
+  setFreeze,
+  setBgm,
+  setMonster
+) => {
+  messageByDirection("【小学校】", "E")(
+    status,
+    setStatus,
+    showMessage,
+    setFreeze,
+    setBgm,
+    setMonster
+  )
+
+  if (status.keys.misorori === "モンスター撃退イベントMSRR版") {
+    setFreeze(true)
+    showMessage("遠くの方から助けを求める声がする...")
+
+    setTimeout(() => {
+      setStatus((prev) => ({
+        ...prev,
+        weather: "NIGHT",
+        keys: {
+          ...prev.keys,
+          engine: false,
+          misorori: "モンスター撃退イベントMSRR版_進行中",
+        },
+      }))
+      showMessage("その時、急に町の明かりが全て消えた。")
+      setTimeout(() => {
+        showMessage("？「....誰か助けて！！！！」")
+        setFreeze(false)
+      }, 2000)
+    }, 3000)
+  }
+}
+
 export const FrozenCity: MapType = {
   type: "OUTDOOR",
   light: false,
   size: 16,
   map: [
     "1111111111111111",
-    "10000000000M000G",
+    "10000000000000MG",
     "1011E11101101101",
     "1H11000001B0DL01",
     "1111F111111F1111",
     "1000000000000001",
     "1311111111111111",
     "1000000211111111",
-    "1110111111111111",
+    "11101N1111111111",
     "111011000000K111",
     "1110110111111111",
-    "1110110110000111",
+    "111011011000O111",
     "11A0110010100111",
     "1110J00010000111",
     "11101110I0011111",
@@ -285,6 +368,7 @@ export const FrozenCity: MapType = {
     G: <Door />,
     K: <Door />,
     L: <Door />,
+    N: <Door />,
   },
   events: {
     "2": "張り紙がある。\n「能力アップのご相談はエンジニアサービスまで！」",
@@ -298,10 +382,12 @@ export const FrozenCity: MapType = {
     G: GoToStation,
     H: "この辺りだけ、空から変な光が差している。",
     I: messageByDirection("【小学校裏】", "E"),
-    J: messageByDirection("【小学校】", "E"),
+    J: EnterElementarySchool,
     K: GoToUrayama,
     L: GoToObasan,
     M: obasanEncountedWithMonster,
+    N: GoToKajiya,
+    O: MisororiMonsterEvent,
   },
   stepEvent: (
     status,
@@ -311,7 +397,7 @@ export const FrozenCity: MapType = {
     setBgm,
     setMonster
   ) => {
-    if (Math.random() > 0.96) {
+    if (Math.random() > (status.keys.engine ? 0.96 : 0.88)) {
       Encount(status, setStatus, showMessage, setFreeze, setBgm, setMonster)
     }
   },

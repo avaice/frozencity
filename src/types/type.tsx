@@ -2,8 +2,10 @@ import { SetterOrUpdater } from "recoil"
 import { MagicList } from "../magicals"
 import { AdminRoom } from "../Maps/AdminRoom"
 import { FrozenCity } from "../Maps/FrozenCity"
+import { Kajiya } from "../Maps/Kajiya"
 import { MisororiRoom } from "../Maps/MisororiRoom"
 import { MyRoom } from "../Maps/MyRoom"
+import { ObasanRoom } from "../Maps/ObasanRoom"
 import { Title } from "../Maps/Title"
 import { BGMType } from "../modules/useBgm"
 import { Monster } from "../Monsters/monsterUtils"
@@ -15,6 +17,8 @@ export const maps = {
   AdminRoom,
   MisororiRoom,
   Title,
+  ObasanRoom,
+  Kajiya,
 }
 
 export type ActionEvent = (
@@ -29,6 +33,7 @@ export type ActionEvent = (
 export type DirectionType = "N" | "E" | "W" | "S"
 export type PositionType = { x: number; y: number }
 export type StatusType = {
+  debug: boolean // デバッグが有効か
   map: keyof typeof maps
   position: PositionType // 位置
   direction: DirectionType // 方角
@@ -49,8 +54,19 @@ export type StatusType = {
     isShopOpened?: boolean // おばさんの商店が空いているか
     adminRoom?: boolean
     tutorial?: boolean
-    misorori?: "初めて再会" | "周りの調査完了" // みそロリと会話をした
+    misorori?: // みそロリと会話をした
+    | "初めて再会"
+      | "周りの調査完了"
+      | "モンスター撃退イベントMSRR版"
+      | "モンスター撃退イベントMSRR版_進行中"
+      | "モンスター撃退イベントMSRR版_バトル中"
+      | "料理開放"
     obasan?: "モンスター撃退イベント" | "モンスターから助けた"
+    engineer?: "初対面イベント"
   }
   magicals: MagicList[]
+  equipments: {
+    sword: ItemType
+    shield: ItemType
+  }
 }

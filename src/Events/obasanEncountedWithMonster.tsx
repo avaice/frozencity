@@ -36,12 +36,12 @@ export const cleared_obasanEncountedWithMonster: ActionEvent = (
     )
     setTimeout(() => {
       showMessage(
-        "おばさん\n「あなたがいなかったら助からなかったかも知れないわ。\nほんの少しだけど、これを差し上げるね。\n私もこの街に住んでいるから、よかったらいらしてくださいね。」"
+        "おばさん\n「あなたがいなかったら助からなかったわ。\nほんの少しだけど、これをあげる。\n私もこの街に住んでいるから、よかったら来てくださいね。」"
       )
       setTimeout(() => {
         setStatus((prev) => ({
           ...prev,
-          money: prev.money + 30,
+          money: prev.money + 40,
           keys: {
             ...prev.keys,
             obasan: "モンスターから助けた",
@@ -49,14 +49,12 @@ export const cleared_obasanEncountedWithMonster: ActionEvent = (
             canMonsterSpawn: true,
           },
         }))
-        showMessage("30Gをもらった。")
+        showMessage("40Gをもらった。")
         setTimeout(() => {
-          showMessage(
-            "プレーヤーは、このことを幼馴染に報告しに行こうと思った。"
-          )
+          showMessage("プレーヤーは、このことを？に報告しに行こうと思った。")
           setFreeze(false)
         }, 1000)
       }, 2000)
-    }, 1000)
+    }, 2000)
   }, 1000)
 }

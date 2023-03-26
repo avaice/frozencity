@@ -49,7 +49,7 @@ const Tutorial: ActionEvent = async (
   setStatus((prev) => ({ ...prev, keys: { ...prev.keys, tutorial: true } }))
 }
 
-const EncountSlime: ActionEvent = (
+const Save: ActionEvent = async (
   status,
   setStatus,
   showMessage,
@@ -57,29 +57,51 @@ const EncountSlime: ActionEvent = (
   _setBgm,
   setMonster
 ) => {
-  encountMonster("slime", showMessage, setFreeze, setMonster)
+  const result = await ask(
+    "ゲームデータを保存しますか？",
+    ["はい", "いいえ"],
+    setFreeze,
+    showMessage
+  )
+  if (result === "はい") {
+    localStorage.setItem(
+      "frozen-city-save-data",
+      JSON.stringify({
+        ...status,
+        position: {
+          x: 1,
+          y: 2,
+        },
+      })
+    )
+    showMessage("保存完了")
+  } else {
+    showMessage("保存しませんでした")
+  }
 }
 
 export const MyRoom: MapType = {
   type: "INDOOR",
   light: true,
   size: 4,
-  map: ["1C11", "1111", "10B1", "1A11"],
+  map: ["1111", "1C11", "10B1", "1A11"],
   customWall: {
     A: <Door />,
   },
   events: {
-    C: EncountSlime,
+    C: Save,
     B: Tutorial,
     A: GoToFrozenCity,
   },
   stepEvent: (status, setStatus, showMessage, setFreeze, setBgm) => {},
   onEntered: (status, setStatus, showMessage, setFreeze, setBgm) => {
     if (!status.keys.tutorial) {
-      showMessage("...目が覚めたら、気味が悪いほど静かだった。")
+      showMessage(
+        "...目が覚めたら、気味が悪いほど静かだった。\n【矢印キーで操作します。セーブはこの部屋を前に進むとできます。】"
+      )
     } else if (status.keys.misorori) {
       showMessage("家に帰った。ずっと住んでいる家の香りは安心する。")
-      setBgm("shibuya")
+      setBgm(undefined)
     }
   },
 }

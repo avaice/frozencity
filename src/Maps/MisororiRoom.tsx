@@ -37,11 +37,11 @@ const MSRR: ActionEvent = async (status, setStatus, showMessage, setFreeze) => {
     setFreeze(true)
 
     const msgs = [
-      "幼馴染\n「おはよ・・・なんか外で機械の音がうるさいけど、どうしたの・・？」",
+      "？\n「おはよ・・・なんか外で機械の音がうるさいけど、どうしたの・・？」",
       "プレーヤーは、自分たちが冷凍保存されていたこと・ついさっき解凍されたばかりだということ・",
       "他の人たちも順に解凍されていくであろうことを話した。",
-      "幼馴染\n「ええ！！？なんで冷凍保存されてたの...？今は何年なの？みんなは元気なの！？」",
-      "幼馴染\n「ちょっと調査してきて！！！」",
+      "？\n「ええ！！？なんで冷凍保存されてたの...？今は何年なの？みんなは元気なの！？」",
+      "？\n「ちょっと調査してきて！！！」",
     ]
     msgs.forEach((v, i) => {
       setTimeout(() => {
@@ -62,27 +62,35 @@ const MSRR: ActionEvent = async (status, setStatus, showMessage, setFreeze) => {
 
   switch (status.keys.misorori) {
     case "初めて再会":
-      showMessage("幼馴染「みんなのことが心配だよ。無事にしてるかな...？」")
+      showMessage("？「みんなのことが心配だよ。無事にしてるかな...？」")
       return
     case "周りの調査完了":
+      setFreeze(true)
       setTimeout(() => {
-        showMessage("幼馴染に、おばさんをモンスターから助けたことを話した。")
+        showMessage("？に、おばさんをモンスターから助けたことを話した。")
         setTimeout(() => {
           showMessage(
-            "幼馴染「その人、私の家の裏に住んでるおばさんだよ！！無事だったんだね、よかった」"
+            "？「その人、私の家の裏にあるお店のおばさんだよ！！無事だったんだね、よかった」"
           )
           setTimeout(() => {
             showMessage(
-              "幼馴染「一つ隣の通りに行けば家があるから、行ってみるといいかもね」"
+              "？「モンスターが出るんだったら武器を持っていた方がいいかもね...」"
             )
             setStatus((prev) => ({
               ...prev,
-              keys: { ...prev.keys, isShopOpened: true },
+              keys: {
+                ...prev.keys,
+                isShopOpened: true,
+                misorori: "モンスター撃退イベントMSRR版",
+              },
             }))
+            setFreeze(false)
           }, 1000)
         }, 1000)
       }, 1000)
       return
+    case "モンスター撃退イベントMSRR版":
+      showMessage("留守中のようだ。")
   }
 }
 
