@@ -20,7 +20,6 @@ export const INITIAL_SETTING = () => ({
     keys: {
       canMonsterSpawn: false,
       engine: false,
-      adminRoom: false,
     },
     magicals: ["reiki"],
     debug: false,

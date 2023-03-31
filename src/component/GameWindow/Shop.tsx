@@ -24,6 +24,53 @@ type ShopType = {
   ) => void
 }
 
+const magicalShop: ShopType = {
+  items: [
+    { item: "Taimatsu", price: 7 },
+    { item: "PremiumTaimatsu", price: 15 },
+    { item: "Chocolate", price: 3 },
+    { item: "Beef", price: 15 },
+  ],
+  message: {
+    buyAfter: "老婆「他に必要なものはあるかい？」",
+    thanks: "老婆「じゃあね。」",
+  },
+  onExit: (_status, setStatus) => {
+    setStatus((prev) => ({
+      ...prev,
+      map: "FrozenCity",
+      position: {
+        x: 14,
+        y: 13,
+      },
+      direction: "S",
+    }))
+  },
+}
+
+const giantShop: ShopType = {
+  items: [
+    { item: "Toufu", price: 5 },
+    { item: "Pork", price: 10 },
+    { item: "GiantFue", price: 100 },
+  ],
+  message: {
+    buyAfter: "ダークジャイアント「縺ｾ縺?繝溘Ν?」",
+    thanks: "ダークジャイアント「繝舌う繝舌う」",
+  },
+  onExit: (_status, setStatus) => {
+    setStatus((prev) => ({
+      ...prev,
+      map: "FrozenCity",
+      position: {
+        x: 14,
+        y: 13,
+      },
+      direction: "S",
+    }))
+  },
+}
+
 const obasanShop: ShopType = {
   items: [
     { item: "Chocolate", price: 2 },
@@ -133,6 +180,11 @@ export const Shop = ({ visible }: { visible: boolean }) => {
         return obasanShop
       case "Kajiya":
         return kajiyaShop
+      case "MagicalZakkaRoom":
+        if (status.keys.engine) {
+          return magicalShop
+        }
+        return giantShop
       default:
         return bugShop
     }

@@ -1,4 +1,5 @@
 import { ask } from "../modules/ask"
+import { encountMonster } from "../Monsters/monsterUtils"
 import { MapType } from "../types/mapType"
 import { ActionEvent, StatusType } from "../types/type"
 import { Door } from "./Parts/Parts"
@@ -59,6 +60,27 @@ const TaimatsuBox: ActionEvent = async (
   }
 }
 
+const SpawnPirania: ActionEvent = async (
+  status,
+  setStatus,
+  showMessage,
+  setFreeze,
+  setBgm,
+  setMonster
+) => {
+  encountMonster("pirania", showMessage, setFreeze, setMonster)
+}
+const SpawnDrone: ActionEvent = async (
+  status,
+  setStatus,
+  showMessage,
+  setFreeze,
+  setBgm,
+  setMonster
+) => {
+  encountMonster("drone", showMessage, setFreeze, setMonster)
+}
+
 const Leave: ActionEvent = async (
   status,
   setStatus,
@@ -93,8 +115,8 @@ export const AdminRoom: MapType = {
   size: 8,
   map: [
     "11111111",
-    "10000001",
-    "101C1101",
+    "1000000E",
+    "101C110F",
     "10000001",
     "101B1101",
     "10101101",
@@ -105,12 +127,16 @@ export const AdminRoom: MapType = {
     B: <span>WEATHER＿CONTROLLER</span>,
     C: <span></span>,
     D: <Door />,
+    E: <span>ピラニアと握手！</span>,
+    F: <span>こんにちはドローンさん</span>,
   },
   events: {
     A: "薄暗く湿っぽい室内は、どこか不思議に感じるほど整然としていた。",
     B: WeatherController,
     C: TaimatsuBox,
     D: Leave,
+    E: SpawnPirania,
+    F: SpawnDrone,
   },
   stepEvent: (status, setStatus, showMessage, setFreeze, setBgm) => {},
   onEntered: (status, setStatus, showMessage, setFreeze, setBgm) => {

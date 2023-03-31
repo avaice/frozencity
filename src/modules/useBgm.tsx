@@ -8,6 +8,7 @@ const BGM_SRC = {
   cheezecake: "./sounds/cheezecake.mp3",
   huyuice: "./sounds/huyuice.mp3",
   obasan: "./sounds/obasan.mp3",
+  gesuido: "./sounds/gesuido.mp3",
 }
 
 export type BGMType = keyof typeof BGM_SRC

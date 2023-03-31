@@ -1,7 +1,13 @@
 import { useRef, useState, useEffect } from "react"
 import { useRecoilState } from "recoil"
 import { deleteItem } from "../../modules/deleteItem"
-import { statusState, messageState, freezeState } from "../../recoilAtoms"
+import { useBgm } from "../../modules/useBgm"
+import {
+  statusState,
+  messageState,
+  freezeState,
+  monsterState,
+} from "../../recoilAtoms"
 import { ItemType, Items } from "../../types/itemType"
 
 export const Inventory = ({
@@ -16,6 +22,9 @@ export const Inventory = ({
   const [message, showMessage] = useRecoilState(messageState)
   const [freeze, setFreeze] = useRecoilState(freezeState) // 入力を受け付けなくするか
   const [selectingEq, setSelectingEq] = useState(false) // 選択中のものが装備中のものか
+  const { currentBgm, setBgm, isInitializedBgm, InitializeBgm, loadStatus } =
+    useBgm()
+  const [monster, setMonster] = useRecoilState(monsterState)
 
   const [selecting, setSelecting] = useState<ItemType | undefined>()
   useEffect(() => {
@@ -48,7 +57,14 @@ export const Inventory = ({
         }
         showMessage(`${Items[selecting].name}を装備した。`)
       }
-      Items[selecting].action(status, setStatus, showMessage, setFreeze)
+      Items[selecting].action(
+        status,
+        setStatus,
+        showMessage,
+        setFreeze,
+        setBgm,
+        setMonster
+      )
       setSelecting(undefined)
       setVisible(false)
       setFreeze(false)

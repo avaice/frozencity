@@ -1,9 +1,10 @@
+import { deleteItem } from "../modules/deleteItem"
 import { Item } from "../types/itemType"
 import { StatusType } from "../types/type"
 
-export const Debugger: Item = {
-  name: "デバッグ端末",
-  description: "Frozen Cityの創造主が落とした端末。",
+export const MisoSoup: Item = {
+  name: "味噌汁",
+  description: "具なしの味噌汁。",
   resell: 0,
   action: (
     status: StatusType,
@@ -11,11 +12,11 @@ export const Debugger: Item = {
     showMessage: (msg: string) => void,
     setFreeze: React.Dispatch<React.SetStateAction<boolean>>
   ) => {
-    showMessage("デバッグ端末を操作した。")
+    showMessage("味加減が絶妙だと思った。\n体力がわずかに回復した。")
     setStatus((prev) => ({
       ...prev,
-      debug: !prev.debug,
-      health: 999,
+      health: Math.min(prev.maxHealth, prev.health + 5),
     }))
+    deleteItem("MisoSoup", status, setStatus)
   },
 }

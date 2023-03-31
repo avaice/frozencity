@@ -1,12 +1,16 @@
 import { SetterOrUpdater } from "recoil"
 import { MagicList } from "../magicals"
 import { AdminRoom } from "../Maps/AdminRoom"
+import { EngineerRoom } from "../Maps/EngineerRoom"
 import { FrozenCity } from "../Maps/FrozenCity"
+import { Gesuido } from "../Maps/Gesuido"
 import { Kajiya } from "../Maps/Kajiya"
+import { MagicalZakkaRoom } from "../Maps/MagicalZakkaRoom"
 import { MisororiRoom } from "../Maps/MisororiRoom"
 import { MyRoom } from "../Maps/MyRoom"
 import { ObasanRoom } from "../Maps/ObasanRoom"
 import { Title } from "../Maps/Title"
+import { Urayama } from "../Maps/Urayama"
 import { BGMType } from "../modules/useBgm"
 import { Monster } from "../Monsters/monsterUtils"
 import { ItemType } from "./itemType"
@@ -19,6 +23,10 @@ export const maps = {
   Title,
   ObasanRoom,
   Kajiya,
+  EngineerRoom,
+  Urayama,
+  Gesuido,
+  MagicalZakkaRoom,
 }
 
 export type ActionEvent = (
@@ -50,9 +58,7 @@ export type StatusType = {
   keys: {
     canMonsterSpawn: boolean // モンスターがスポーンするか
     engine: boolean // 町の稼動装置
-    isThawedEngineer?: boolean // エンジニアを目覚めさせた
     isShopOpened?: boolean // おばさんの商店が空いているか
-    adminRoom?: boolean
     tutorial?: boolean
     misorori?: // みそロリと会話をした
     | "初めて再会"
@@ -62,7 +68,7 @@ export type StatusType = {
       | "モンスター撃退イベントMSRR版_バトル中"
       | "料理開放"
     obasan?: "モンスター撃退イベント" | "モンスターから助けた"
-    engineer?: "初対面イベント"
+    engineer?: "初対面イベント" | "エンジニア開放"
   }
   magicals: MagicList[]
   equipments: {

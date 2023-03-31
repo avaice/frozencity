@@ -16,7 +16,7 @@ export const Kajiya: MapType = {
     setBgm("shibuya")
     showMessage(
       `鍛冶屋に入った。\n老人「よお。${
-        !status.keys.engine && "なんか外が物騒だな。大丈夫か？"
+        !status.keys.engine ? "なんか外が物騒だな。大丈夫か？" : ""
       }」`
     )
   },

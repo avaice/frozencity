@@ -51,7 +51,9 @@ export const cleared_obasanEncountedWithMonster: ActionEvent = (
         }))
         showMessage("40Gをもらった。")
         setTimeout(() => {
-          showMessage("プレーヤーは、このことを？に報告しに行こうと思った。")
+          showMessage(
+            "プレーヤーは、このことをみそろりに報告しに行こうと思った。"
+          )
           setFreeze(false)
         }, 1000)
       }, 2000)

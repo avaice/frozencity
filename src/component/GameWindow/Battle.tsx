@@ -144,8 +144,8 @@ export const Battle = ({ visible }: { visible: boolean }) => {
     }
 
     showMessage(`${monster.name}の攻撃！`)
-    setTimeout(() => {
-      const getDmg = monster.attack(
+    setTimeout(async () => {
+      const getDmg = await monster.attack(
         status,
         setStatus,
         showMessage,

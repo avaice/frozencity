@@ -57,9 +57,12 @@ export const ObasanRoom: MapType = {
   },
   stepEvent: (status, setStatus, showMessage, setFreeze, setBgm) => {},
   onEntered: (status, setStatus, showMessage, setFreeze, setBgm) => {
-    setBgm("obasan")
+    setBgm("huyuice")
     showMessage(
-      "おばさんの店に入った。\nおばさん「この前は助かったわ。安くするから何かいかが？」"
+      "おばさんの店に入った。\n" +
+        (status.keys.engine
+          ? "おばさん「この前は助かったわ。安くするから何かいかが？」"
+          : "おばさん「外が物騒ね...」")
     )
   },
 }

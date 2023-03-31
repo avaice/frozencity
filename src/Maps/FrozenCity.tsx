@@ -1,3 +1,4 @@
+import { MeetEngineerEvent } from "../Events/encountedEngineerAtUrayama"
 import { MisororiMonsterEvent } from "../Events/misororiEncountedCow"
 import { obasanEncountedWithMonster } from "../Events/obasanEncountedWithMonster"
 import { ask } from "../modules/ask"
@@ -21,7 +22,7 @@ const GoToMagicalRoom: ActionEvent = async (
   )
 
   if (select === "扉を開ける") {
-    if (!status.keys.adminRoom) {
+    if (!status.debug) {
       showMessage("鍵がかかっていて開かない。")
       return
     }
@@ -116,9 +117,35 @@ const GoToUrayama: ActionEvent = async (
   status,
   setStatus,
   showMessage,
-  setFreeze
+  setFreeze,
+  setBgm,
+  setMonster
 ) => {
-  showMessage("【裏山】\n学校の裏にある、小さな山。がれきがあって進めない。")
+  if (status.keys.engineer === "初対面イベント") {
+    MeetEngineerEvent(
+      status,
+      setStatus,
+      showMessage,
+      setFreeze,
+      setBgm,
+      setMonster
+    )
+  } else {
+    if (status.keys.engineer !== "エンジニア開放") {
+      return showMessage(
+        "【裏山】\n学校の裏にある、小さな山。がれきがあって進めない。"
+      )
+    }
+    setStatus((prev) => ({
+      ...prev,
+      map: "Urayama",
+      position: {
+        x: 4,
+        y: 6,
+      },
+      direction: "N",
+    }))
+  }
 }
 
 const EngineToggle: ActionEvent = async (
@@ -237,10 +264,50 @@ const GoToEngineer: ActionEvent = async (
   )
 
   if (select === "入る") {
-    if (!status.keys.engine || !status.keys.isThawedEngineer) {
+    if (!status.keys.engine || status.keys.engineer !== "エンジニア開放") {
       showMessage("鍵がかかっていて開かない。")
       return
     }
+    setStatus((prev) => ({
+      ...prev,
+      map: "EngineerRoom",
+      position: {
+        x: 1,
+        y: 3,
+      },
+      direction: "N",
+    }))
+  } else {
+    showMessage("特に用事が思いつかなかったので、入るのをやめた。")
+  }
+}
+const GoToMagicalZakka: ActionEvent = async (
+  status,
+  setStatus,
+  showMessage,
+  setFreeze
+) => {
+  const select = await ask(
+    "【マジカル雑貨】",
+    ["入る", "何もしない"],
+    setFreeze,
+    showMessage
+  )
+
+  if (select === "入る") {
+    if (!status.keys.isShopOpened) {
+      showMessage("鍵がかかっていて開かない。")
+      return
+    }
+    setStatus((prev) => ({
+      ...prev,
+      map: "MagicalZakkaRoom",
+      position: {
+        x: 1,
+        y: 2,
+      },
+      direction: "N",
+    }))
   } else {
     showMessage("特に用事が思いつかなかったので、入るのをやめた。")
   }
@@ -330,7 +397,7 @@ const EnterElementarySchool: ActionEvent = (
       }))
       showMessage("その時、急に町の明かりが全て消えた。")
       setTimeout(() => {
-        showMessage("？「....誰か助けて！！！！」")
+        showMessage("みそろり「....誰か助けて！！！！」")
         setFreeze(false)
       }, 2000)
     }, 3000)
@@ -354,9 +421,9 @@ export const FrozenCity: MapType = {
     "111011000000K111",
     "1110110111111111",
     "111011011000O111",
-    "11A0110010100111",
-    "1110J00010000111",
-    "11101110I0011111",
+    "11A01100101001P1",
+    "1110J00010000101",
+    "11101110I0010001",
     "111C111111111111",
   ],
   customWall: {
@@ -369,6 +436,7 @@ export const FrozenCity: MapType = {
     K: <Door />,
     L: <Door />,
     N: <Door />,
+    P: <Door />,
   },
   events: {
     "2": "張り紙がある。\n「能力アップのご相談はエンジニアサービスまで！」",
@@ -388,6 +456,7 @@ export const FrozenCity: MapType = {
     M: obasanEncountedWithMonster,
     N: GoToKajiya,
     O: MisororiMonsterEvent,
+    P: GoToMagicalZakka,
   },
   stepEvent: (
     status,
@@ -397,7 +466,7 @@ export const FrozenCity: MapType = {
     setBgm,
     setMonster
   ) => {
-    if (Math.random() > (status.keys.engine ? 0.96 : 0.88)) {
+    if (Math.random() > (status.keys.engine ? 0.97 : 0.88)) {
       Encount(status, setStatus, showMessage, setFreeze, setBgm, setMonster)
     }
   },

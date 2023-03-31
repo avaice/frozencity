@@ -1,3 +1,4 @@
+import { misororiCooking } from "../Events/misororiCooking"
 import { ask } from "../modules/ask"
 import { MapType } from "../types/mapType"
 import { ActionEvent, StatusType } from "../types/type"
@@ -32,16 +33,23 @@ const GoToFrozenCity: ActionEvent = async (
   }
 }
 
-const MSRR: ActionEvent = async (status, setStatus, showMessage, setFreeze) => {
+const MSRR: ActionEvent = async (
+  status,
+  setStatus,
+  showMessage,
+  setFreeze,
+  setBgm,
+  setMonster
+) => {
   if (!status.keys.misorori) {
     setFreeze(true)
 
     const msgs = [
-      "？\n「おはよ・・・なんか外で機械の音がうるさいけど、どうしたの・・？」",
+      "みそろり\n「おはよ・・・なんか外で機械の音がうるさいけど、どうしたの・・？」",
       "プレーヤーは、自分たちが冷凍保存されていたこと・ついさっき解凍されたばかりだということ・",
       "他の人たちも順に解凍されていくであろうことを話した。",
-      "？\n「ええ！！？なんで冷凍保存されてたの...？今は何年なの？みんなは元気なの！？」",
-      "？\n「ちょっと調査してきて！！！」",
+      "みそろり\n「ええ！！？なんで冷凍保存されてたの...？今は何年なの？みんなは元気なの！？」",
+      "みそろり\n「ちょっと調査してきて！！！」",
     ]
     msgs.forEach((v, i) => {
       setTimeout(() => {
@@ -62,19 +70,19 @@ const MSRR: ActionEvent = async (status, setStatus, showMessage, setFreeze) => {
 
   switch (status.keys.misorori) {
     case "初めて再会":
-      showMessage("？「みんなのことが心配だよ。無事にしてるかな...？」")
+      showMessage("みそろり「みんなのことが心配だよ。無事にしてるかな...？」")
       return
     case "周りの調査完了":
       setFreeze(true)
       setTimeout(() => {
-        showMessage("？に、おばさんをモンスターから助けたことを話した。")
+        showMessage("みそろりに、おばさんをモンスターから助けたことを話した。")
         setTimeout(() => {
           showMessage(
-            "？「その人、私の家の裏にあるお店のおばさんだよ！！無事だったんだね、よかった」"
+            "みそろり「その人、私の家の裏にあるお店のおばさんだよ！！無事だったんだね、よかった」"
           )
           setTimeout(() => {
             showMessage(
-              "？「モンスターが出るんだったら武器を持っていた方がいいかもね...」"
+              "みそろり「モンスターが出るんだったら武器を持っていた方がいいかもね...」"
             )
             setStatus((prev) => ({
               ...prev,
@@ -85,11 +93,21 @@ const MSRR: ActionEvent = async (status, setStatus, showMessage, setFreeze) => {
               },
             }))
             setFreeze(false)
-          }, 1000)
-        }, 1000)
+          }, 1600)
+        }, 2000)
       }, 1000)
       return
-    case "モンスター撃退イベントMSRR版":
+    case "料理開放":
+      misororiCooking(
+        status,
+        setStatus,
+        showMessage,
+        setFreeze,
+        setBgm,
+        setMonster
+      )
+      return
+    default:
       showMessage("留守中のようだ。")
   }
 }

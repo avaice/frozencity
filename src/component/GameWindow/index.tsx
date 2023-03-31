@@ -225,7 +225,13 @@ export const GameWindow = ({
         setVisible={setIsVisibleInventory}
       />
 
-      <Shop visible={status.map === "ObasanRoom" || status.map === "Kajiya"} />
+      <Shop
+        visible={
+          status.map === "ObasanRoom" ||
+          status.map === "Kajiya" ||
+          status.map === "MagicalZakkaRoom"
+        }
+      />
 
       <Battle visible={!!monster} />
     </div>

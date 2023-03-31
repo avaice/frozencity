@@ -3,9 +3,13 @@ import { BGMType } from "../modules/useBgm"
 import { monsterState } from "../recoilAtoms"
 import { Items, ItemType } from "../types/itemType"
 import { ActionEvent, StatusType } from "../types/type"
+import { BeeMonster } from "./MonsterComponent/bee"
 import { CowMonster } from "./MonsterComponent/cow"
 import { DarkGiantMonster } from "./MonsterComponent/darkGiant"
+import { DroneMonster } from "./MonsterComponent/drone"
 import { GiantMonster } from "./MonsterComponent/giant"
+import { MouseMonster } from "./MonsterComponent/mouse"
+import { PiraniaMonster } from "./MonsterComponent/pirania"
 import { SlimeMonster } from "./MonsterComponent/slime"
 
 export type Monster = {
@@ -20,7 +24,7 @@ export type Monster = {
     setFreeze: React.Dispatch<React.SetStateAction<boolean>>,
     setBgm: React.Dispatch<React.SetStateAction<BGMType | undefined>>,
     setMonster: SetterOrUpdater<Monster | undefined>
-  ) => number
+  ) => number | Promise<number>
   drop?: ItemType
   money?: number
   exp: number
@@ -32,6 +36,10 @@ const monsters = {
   giant: GiantMonster,
   darkGiant: DarkGiantMonster,
   cow: CowMonster,
+  bee: BeeMonster,
+  drone: DroneMonster,
+  pirania: PiraniaMonster,
+  mouse: MouseMonster,
 }
 
 export const monsterAttack = (
