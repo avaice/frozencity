@@ -1,3 +1,4 @@
+import { calcMaxHealth, calcRequireExp, calcRequireMoney } from "../calculator"
 import { misororiCooking } from "../Events/misororiCooking"
 import { ask } from "../modules/ask"
 import { MapType } from "../types/mapType"
@@ -51,8 +52,8 @@ const Engineer: ActionEvent = async (
   ) {
     return showMessage("おじさん「そうか。」")
   }
-  const needExp = 20 * Math.pow(1.7, status.level)
-  const needMoney = 20 * status.level
+  const needExp = calcRequireExp(status.level)
+  const needMoney = calcRequireMoney(status.level)
 
   if (status.debug) {
     console.log("必要Exp：" + needExp)
@@ -77,7 +78,7 @@ const Engineer: ActionEvent = async (
       ...prev,
       level: prev.level + 1,
       exp: 0,
-      maxHealth: Math.floor(Math.pow(15, (10 + prev.level + 1) / 10)),
+      maxHealth: calcMaxHealth(prev.level),
       money: prev.money - needMoney,
     }))
     showMessage("おじさん「よし、これでできたぞ。」")

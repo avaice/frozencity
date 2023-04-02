@@ -331,6 +331,22 @@ const Encount: ActionEvent = (
     encountMonster("slime", showMessage, setFreeze, setMonster)
   }
 }
+const EncountSlime: ActionEvent = (
+  status,
+  setStatus,
+  showMessage,
+  setFreeze,
+  _setBgm,
+  setMonster
+) => {
+  showMessage("この辺りだけ、変な光が差している。")
+  if (!status.keys.canMonsterSpawn) {
+    return
+  }
+  setTimeout(() => {
+    encountMonster("slime", showMessage, setFreeze, setMonster)
+  }, 1200)
+}
 
 const EnterJutakugai: ActionEvent = (
   status,
@@ -448,7 +464,7 @@ export const FrozenCity: MapType = {
     E: GoToEngineer,
     F: EnterJutakugai,
     G: GoToStation,
-    H: "この辺りだけ、空から変な光が差している。",
+    H: EncountSlime,
     I: messageByDirection("【小学校裏】", "E"),
     J: EnterElementarySchool,
     K: GoToUrayama,

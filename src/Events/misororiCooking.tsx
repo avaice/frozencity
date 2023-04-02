@@ -26,6 +26,7 @@ export const misororiCooking: ActionEvent = async (
   const recipe: ItemType[][] = [
     ["Beef", "BeefMisoSoup"],
     ["Unagi", "UnagiMisoSoup"],
+    ["Fish", "FishMisoSoup"],
     ["Chocolate", "ChocolateMisoSoup"],
   ]
 
@@ -34,6 +35,7 @@ export const misororiCooking: ActionEvent = async (
   )
 
   if (!choice) {
+    setFreeze(false)
     showMessage("みそろり「材料が足りないよ〜」")
     return
   }

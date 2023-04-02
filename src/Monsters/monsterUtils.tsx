@@ -11,6 +11,7 @@ import { GiantMonster } from "./MonsterComponent/giant"
 import { MouseMonster } from "./MonsterComponent/mouse"
 import { PiraniaMonster } from "./MonsterComponent/pirania"
 import { SlimeMonster } from "./MonsterComponent/slime"
+import { WolfMonster } from "./MonsterComponent/wolf"
 
 export type Monster = {
   image: string
@@ -40,6 +41,7 @@ const monsters = {
   drone: DroneMonster,
   pirania: PiraniaMonster,
   mouse: MouseMonster,
+  wolf: WolfMonster,
 }
 
 export const monsterAttack = (

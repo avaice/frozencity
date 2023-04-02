@@ -9,6 +9,7 @@ import { MagicalZakkaRoom } from "../Maps/MagicalZakkaRoom"
 import { MisororiRoom } from "../Maps/MisororiRoom"
 import { MyRoom } from "../Maps/MyRoom"
 import { ObasanRoom } from "../Maps/ObasanRoom"
+import { RecycleShop } from "../Maps/RecycleShop"
 import { Title } from "../Maps/Title"
 import { Urayama } from "../Maps/Urayama"
 import { BGMType } from "../modules/useBgm"
@@ -27,6 +28,7 @@ export const maps = {
   Urayama,
   Gesuido,
   MagicalZakkaRoom,
+  RecycleShop,
 }
 
 export type ActionEvent = (

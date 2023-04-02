@@ -1,3 +1,9 @@
+import {
+  calcMaxHealth,
+  calcPower,
+  calcRequireExp,
+  calcRequireMoney,
+} from "../calculator"
 import { ask } from "../modules/ask"
 import { encountMonster } from "../Monsters/monsterUtils"
 import { MapType } from "../types/mapType"
@@ -80,6 +86,44 @@ const SpawnDrone: ActionEvent = async (
 ) => {
   encountMonster("drone", showMessage, setFreeze, setMonster)
 }
+const SpawnWolf: ActionEvent = async (
+  status,
+  setStatus,
+  showMessage,
+  setFreeze,
+  setBgm,
+  setMonster
+) => {
+  encountMonster("wolf", showMessage, setFreeze, setMonster)
+}
+
+const GoToRecycleShop: ActionEvent = async (
+  status,
+  setStatus,
+  showMessage,
+  setFreeze
+) => {
+  const select = await ask(
+    "【RECYCLE MANIA】",
+    ["入る", "何もしない"],
+    setFreeze,
+    showMessage
+  )
+
+  if (select === "入る") {
+    setStatus((prev) => ({
+      ...prev,
+      map: "RecycleShop",
+      position: {
+        x: 1,
+        y: 2,
+      },
+      direction: "N",
+    }))
+  } else {
+    showMessage("もう少し下水道にとどまることにした。")
+  }
+}
 
 const Leave: ActionEvent = async (
   status,
@@ -109,6 +153,24 @@ const Leave: ActionEvent = async (
   }
 }
 
+const CheckLevelStatus: ActionEvent = async (
+  status,
+  setStatus,
+  showMessage,
+  setFreeze,
+  setBgm,
+  setMonster
+) => {
+  for (let i = 1; i <= 50; i++) {
+    console.log(
+      `Lv:${i} Exp:${calcRequireExp(i - 1)} Need:${calcRequireMoney(
+        i - 1
+      )} BasePow:${calcPower(i)} MaxHealth:${calcMaxHealth(i)}`
+    )
+  }
+  showMessage("ブラウザコンソールに結果を出力しました。")
+}
+
 export const AdminRoom: MapType = {
   type: "INDOOR",
   light: false,
@@ -117,11 +179,11 @@ export const AdminRoom: MapType = {
     "11111111",
     "1000000E",
     "101C110F",
-    "10000001",
-    "101B1101",
+    "1000000I",
+    "H01B1101",
     "10101101",
     "1A000001",
-    "1D111111",
+    "1D1111G1",
   ],
   customWall: {
     B: <span>WEATHER＿CONTROLLER</span>,
@@ -129,6 +191,9 @@ export const AdminRoom: MapType = {
     D: <Door />,
     E: <span>ピラニアと握手！</span>,
     F: <span>こんにちはドローンさん</span>,
+    G: <span>リサイクルマニア</span>,
+    H: <span>必要経験値、基本攻撃力と最大HPを調べる</span>,
+    I: <span>オオカミさん出ておいで</span>,
   },
   events: {
     A: "薄暗く湿っぽい室内は、どこか不思議に感じるほど整然としていた。",
@@ -137,6 +202,9 @@ export const AdminRoom: MapType = {
     D: Leave,
     E: SpawnPirania,
     F: SpawnDrone,
+    I: SpawnWolf,
+    G: GoToRecycleShop,
+    H: CheckLevelStatus,
   },
   stepEvent: (status, setStatus, showMessage, setFreeze, setBgm) => {},
   onEntered: (status, setStatus, showMessage, setFreeze, setBgm) => {

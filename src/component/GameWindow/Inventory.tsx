@@ -1,5 +1,6 @@
 import { useRef, useState, useEffect } from "react"
 import { useRecoilState } from "recoil"
+import { ask } from "../../modules/ask"
 import { deleteItem } from "../../modules/deleteItem"
 import { useBgm } from "../../modules/useBgm"
 import {
@@ -13,9 +14,11 @@ import { ItemType, Items } from "../../types/itemType"
 export const Inventory = ({
   visible,
   setVisible,
+  type,
 }: {
   visible: boolean
   setVisible: React.Dispatch<React.SetStateAction<boolean>>
+  type: "use" | "sell"
 }) => {
   const selectRef = useRef<HTMLSelectElement>(null)
   const [status, setStatus] = useRecoilState(statusState)
@@ -26,7 +29,7 @@ export const Inventory = ({
     useBgm()
   const [monster, setMonster] = useRecoilState(monsterState)
 
-  const [selecting, setSelecting] = useState<ItemType | undefined>()
+  const [selecting, setSelecting] = useState<ItemType | undefined | "leave">()
   useEffect(() => {
     if (selectRef.current) {
       selectRef.current.focus()
@@ -34,11 +37,22 @@ export const Inventory = ({
     setSelecting(undefined)
   }, [visible])
 
+  const leave = () => {
+    showMessage("ロボット店員「バイバイ」")
+    setStatus((prev) => ({
+      ...prev,
+      position: { x: 10, y: 2 },
+      direction: "N",
+      map: "Gesuido",
+    }))
+    setFreeze(false)
+  }
+
   const use = () => {
     if (selectingEq) {
       return
     }
-    if (selecting) {
+    if (selecting && selecting !== "leave") {
       const eq = Items[selecting].equip
       if (eq) {
         deleteItem(selecting, status, setStatus)
@@ -71,6 +85,31 @@ export const Inventory = ({
     }
   }
 
+  const sell = async () => {
+    if (!selecting || selecting === "leave") {
+      return
+    }
+
+    const result = await ask(
+      `${Items[selecting].name}を売却しますか？\n買取金額: ${Items[selecting].resell}G`,
+      ["売る", "やめておく"],
+      setFreeze,
+      showMessage
+    )
+    if (result === "やめておく") {
+      return showMessage("もったいないので売るのをやめた。")
+    }
+    showMessage(
+      `${Items[selecting].name}を売却した。\n買取金額: ${Items[selecting].resell}G`
+    )
+    deleteItem(selecting, status, setStatus)
+
+    setStatus((prev) => ({
+      ...prev,
+      money: prev.money + (Items[selecting].resell ?? 0),
+    }))
+  }
+
   if (!visible) {
     return null
   }
@@ -94,6 +133,8 @@ export const Inventory = ({
               if (e.target.value.includes("eq_")) {
                 setSelectingEq(true)
                 setSelecting(e.target.value.replace("eq_", "") as ItemType)
+              } else if (e.target.value === "leave") {
+                setSelecting("leave")
               } else {
                 setSelectingEq(false)
                 setSelecting(e.target.value as ItemType)
@@ -101,7 +142,10 @@ export const Inventory = ({
             }}
             onKeyUp={(e) => {
               if (e.code === "Enter") {
-                use()
+                if (selecting === "leave") {
+                  leave()
+                }
+                type === "use" ? use() : sell()
               }
             }}
           >
@@ -116,17 +160,64 @@ export const Inventory = ({
             <option value={`eq_${status.equipments.shield}`}>
               {Items[status.equipments.shield].name}(装備中)
             </option>
+            {type === "sell" && (
+              <optgroup label="コマンド">
+                <option value="leave">店を出る</option>
+              </optgroup>
+            )}
           </select>
         </div>
         <div className="game-inventory-items-child right">
           <h3>
-            {selecting ? Items[selecting].name : "アイテムを選択してください:"}
-            {selecting && Items[selecting].equip && "(装備)"}
+            {selecting
+              ? selecting !== "leave"
+                ? Items[selecting].name
+                : "帰る"
+              : "アイテムを選択してください:"}
+            {selecting &&
+              selecting !== "leave" &&
+              Items[selecting].equip &&
+              "(装備)"}
           </h3>
-          <p className="desc">{selecting && Items[selecting].description} </p>
-          <button className="use" onClick={() => use()} disabled={selectingEq}>
-            {selecting && Items[selecting].equip ? "装備" : "使う"}(Enter)
-          </button>
+          <p className="desc">
+            {selecting && selecting !== "leave" && Items[selecting].description}{" "}
+          </p>
+          {type === "use" && (
+            <button
+              className="use"
+              onClick={() => use()}
+              disabled={selectingEq}
+            >
+              {selecting && selecting !== "leave" && Items[selecting].equip
+                ? "装備"
+                : "使う"}
+              (Enter)
+            </button>
+          )}
+          {type === "sell" && selecting !== "leave" ? (
+            <button
+              className="use"
+              onClick={() => sell()}
+              disabled={
+                selectingEq ||
+                !selecting ||
+                Items[selecting].resell === undefined
+              }
+            >
+              売る(Enter)
+            </button>
+          ) : (
+            selecting === "leave" && (
+              <button
+                className="use"
+                onClick={() => {
+                  leave()
+                }}
+              >
+                確定(Enter)
+              </button>
+            )
+          )}
         </div>
       </div>
     </div>

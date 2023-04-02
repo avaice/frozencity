@@ -53,6 +53,7 @@ const giantShop: ShopType = {
     { item: "Toufu", price: 5 },
     { item: "Pork", price: 10 },
     { item: "GiantFue", price: 100 },
+    { item: "NeoBesuto", price: 230 },
   ],
   message: {
     buyAfter: "ダークジャイアント「縺ｾ縺?繝溘Ν?」",
@@ -74,7 +75,7 @@ const giantShop: ShopType = {
 const obasanShop: ShopType = {
   items: [
     { item: "Chocolate", price: 2 },
-    { item: "Unagi", price: 25 },
+    { item: "Unagi", price: 20 },
     { item: "Taimatsu", price: 5 },
     { item: "Menbou", price: 15 },
   ],
@@ -99,9 +100,12 @@ const kajiyaShop: ShopType = {
   items: [
     { item: "Taimatsu", price: 7 },
     { item: "Knife", price: 50 },
-    { item: "Axe", price: 500 },
+    { item: "MiniSword", price: 120 },
+    { item: "Axe", price: 250 },
+    { item: "PlatinumSword", price: 580 },
     { item: "TogeSword", price: 950 },
     { item: "Besuto", price: 40 },
+    { item: "SutenresuTate", price: 100 },
   ],
   message: {
     buyAfter: "老人「他に欲しいものはあるか？」",

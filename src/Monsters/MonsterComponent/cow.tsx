@@ -6,11 +6,12 @@ export const CowMonster: Monster = {
   image: "monster.png",
   health: 30,
   money: 0,
-  exp: 10,
+  exp: 5,
   attack: (status, setStatus, showMessage, setFreeze): number => {
     const dmg = withMargin(8, 5)
 
     return monsterAttack(dmg, status, setStatus, showMessage)
   },
+  drop: "Beef",
   escapeChance: 0.75,
 }

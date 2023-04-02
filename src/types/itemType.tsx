@@ -4,6 +4,8 @@ import { BeefMisoSoup } from "../items/beefMisoSoup"
 import { Chocolate } from "../items/chocolate"
 import { ChocolateMisoSoup } from "../items/chocolateMisoSoup"
 import { Debugger } from "../items/debugger"
+import { Fish } from "../items/fish"
+import { FishMisoSoup } from "../items/fishMisoSoup"
 import { GiantFue } from "../items/giantFue"
 import { MisoSoup } from "../items/misoSoup"
 import { Pork } from "../items/pork"
@@ -22,6 +24,10 @@ import { UnagiMisoSoup } from "../items/unagiMisoSoup"
 import { BGMType } from "../modules/useBgm"
 import { Monster } from "../Monsters/monsterUtils"
 import { ActionEvent, StatusType } from "./type"
+import { SutenresuTate } from "../items/shields/sutenresuTate"
+import { NeoBesuto } from "../items/shields/neoBesuto"
+import { PlatinumSword } from "../items/swords/platinumSword"
+import { MiniSword } from "../items/swords/miniSword"
 
 export type Item = {
   name: string
@@ -58,6 +64,12 @@ export const Items = {
   Toufu,
   GiantFue,
   PremiumTaimatsu,
+  Fish,
+  FishMisoSoup,
+  SutenresuTate,
+  NeoBesuto,
+  PlatinumSword,
+  MiniSword,
 }
 
 // export type Item = {

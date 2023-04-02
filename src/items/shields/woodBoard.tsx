@@ -6,7 +6,7 @@ export const WoodBoard: Item = {
   name: "ベニヤ板",
   description: "ホームセンターで売っているベニヤ板。",
   resell: 5,
-  equip: { type: "shield", power: 2 },
+  equip: { type: "shield", power: 3 },
   action: (
     status: StatusType,
     setStatus: React.Dispatch<React.SetStateAction<StatusType>>,

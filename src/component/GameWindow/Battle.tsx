@@ -1,5 +1,7 @@
 import { useRef, useState, useEffect } from "react"
 import { useRecoilState } from "recoil"
+import { calcPower } from "../../calculator"
+import { STATIC_GAME_SETTING } from "../../gameSettings"
 import { magicals, MagicList } from "../../magicals"
 import { useBgm } from "../../modules/useBgm"
 import { withMargin } from "../../modules/withMargin"
@@ -59,7 +61,10 @@ export const Battle = ({ visible }: { visible: boolean }) => {
         showMessage("プレーヤーの攻撃！")
         setTimeout(() => {
           const sword = Items[status.equipments.sword].equip
-          const dmg = withMargin(status.level + (sword ? sword.power : 0), 3)
+          const dmg = withMargin(
+            calcPower(status.level) + (sword ? sword.power : 0),
+            3
+          )
           if (dmg === 0) {
             showMessage("攻撃は命中しなかった。")
           } else {
@@ -115,14 +120,23 @@ export const Battle = ({ visible }: { visible: boolean }) => {
       case "attack":
         const dmg = await attack()
         if (monster.health - dmg <= 0) {
+          const getItem =
+            monster.drop &&
+            status.items.length < STATIC_GAME_SETTING.maxItem &&
+            Math.random() < 0.65
           setStatus((prev) => ({
             ...prev,
             money: monster.money ? prev.money + monster.money : prev.money,
             exp: prev.exp + monster.exp,
+            items: getItem
+              ? [...prev.items, monster.drop as ItemType]
+              : [...prev.items],
           }))
           showMessage(
             `${monster.name}を倒した！\n${monster.exp}経験値${
-              monster.money && `と${monster.money}G`
+              monster.money ? `と${monster.money}G` : ""
+            }${
+              getItem ? `と${Items[monster.drop as ItemType].name}` : ""
             }を得た。`
           )
           setTimeout(() => {
@@ -185,7 +199,9 @@ export const Battle = ({ visible }: { visible: boolean }) => {
           <h3>Monster</h3>
           <img
             className={"game-battle-main-monster"}
-            src={monster ? "./images/" + monster.image : ""}
+            src={
+              monster ? `${process.env.PUBLIC_URL}/images/${monster.image}` : ""
+            }
           ></img>
           <button className="use" onClick={() => turn()}>
             選択(Enter)

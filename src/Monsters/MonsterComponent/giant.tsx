@@ -8,7 +8,7 @@ export const GiantMonster: Monster = {
   money: 5,
   exp: 4,
   attack: (status, setStatus, showMessage, setFreeze): number => {
-    const dmg = withMargin(4, 6)
+    const dmg = withMargin(5, 6)
 
     return monsterAttack(dmg, status, setStatus, showMessage)
   },

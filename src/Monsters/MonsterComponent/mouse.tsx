@@ -8,7 +8,7 @@ export const MouseMonster: Monster = {
   money: 2,
   exp: 5,
   attack: (status, setStatus, showMessage, setFreeze): number => {
-    const dmg = withMargin(4, 1)
+    const dmg = withMargin(18, 2)
     return monsterAttack(dmg, status, setStatus, showMessage)
   },
   escapeChance: 0.2,

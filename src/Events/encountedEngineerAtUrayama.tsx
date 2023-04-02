@@ -32,7 +32,7 @@ export const MeetEngineerEvent: ActionEvent = (
         )
         setTimeout(() => {
           showMessage(
-            "おじさん「俺のところは半年くらい前に急に解凍されたんだ。同じようにモンスターも住み着いていて大変だったが、数ヶ月間はなんとかみんな暮らせていた。」"
+            "おじさん「俺のところは半年くらい前に急に解凍されたんだ。同じようにモンスターも住み着いていて大変だったが、しばらくの間はなんとかみんな暮らせてた。」"
           )
           setTimeout(() => {
             showMessage(

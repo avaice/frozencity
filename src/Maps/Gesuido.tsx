@@ -34,6 +34,34 @@ const GoToUrayama: ActionEvent = async (
   }
 }
 
+const GoToRecycleShop: ActionEvent = async (
+  status,
+  setStatus,
+  showMessage,
+  setFreeze
+) => {
+  const select = await ask(
+    "【RECYCLE MANIA】",
+    ["入る", "何もしない"],
+    setFreeze,
+    showMessage
+  )
+
+  if (select === "入る") {
+    setStatus((prev) => ({
+      ...prev,
+      map: "RecycleShop",
+      position: {
+        x: 1,
+        y: 2,
+      },
+      direction: "N",
+    }))
+  } else {
+    showMessage("もう少し下水道にとどまることにした。")
+  }
+}
+
 const GoToSuidokyoku: ActionEvent = async (
   status,
   setStatus,
@@ -91,7 +119,7 @@ export const Gesuido: MapType = {
     "1111111111111111",
     "1111111111111111",
     "1E0000000000000B",
-    "1100011011111101",
+    "1100011011F11101",
     "1000001011111101",
     "1011101011111111",
     "101D1C1000000001",
@@ -111,6 +139,7 @@ export const Gesuido: MapType = {
     C: <Door />,
     D: <Door />,
     E: <Door />,
+    F: <Door />,
   },
   events: {
     A: GoToUrayama,
@@ -118,6 +147,7 @@ export const Gesuido: MapType = {
     C: GoToNorthCity,
     D: GoToAjito,
     E: "鍵がかかっている。",
+    F: GoToRecycleShop,
   },
   stepEvent: (
     status,

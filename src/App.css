@@ -139,8 +139,12 @@ main {
   left: 10px;
   width: calc(100% - 10px);
   overflow-wrap: break-word;
-  font-size: 14px;
+  font-size: 10px;
   background-color: white;
+  opacity: 0.6;
+}
+.debug:hover {
+  opacity: 1;
 }
 
 .fadeIn {

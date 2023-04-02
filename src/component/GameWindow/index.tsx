@@ -221,8 +221,9 @@ export const GameWindow = ({
       </div>
 
       <Inventory
-        visible={isVisibleInventory}
+        visible={isVisibleInventory || status.map === "RecycleShop"}
         setVisible={setIsVisibleInventory}
+        type={status.map === "RecycleShop" ? "sell" : "use"}
       />
 
       <Shop

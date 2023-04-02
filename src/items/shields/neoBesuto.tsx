@@ -1,11 +1,12 @@
+import { deleteItem } from "../../modules/deleteItem"
 import { Item } from "../../types/itemType"
 import { StatusType } from "../../types/type"
 
-export const Axe: Item = {
-  name: "斧",
-  description: "普通の斧。",
-  resell: 60,
-  equip: { type: "sword", power: 12 },
+export const NeoBesuto: Item = {
+  name: "ネオ鉄板入りベスト",
+  description: "最新型の鉄板入りベスト。新開発の素材で攻撃を軽々とかわす。",
+  resell: 40,
+  equip: { type: "shield", power: 12 },
   action: (
     status: StatusType,
     setStatus: React.Dispatch<React.SetStateAction<StatusType>>,

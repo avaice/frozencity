@@ -1,33 +1,33 @@
 import { withMargin } from "../../modules/withMargin"
 import { Monster, monsterAttack } from "../monsterUtils"
 
-export const DroneMonster: Monster = {
-  name: "偵察ドローン",
+export const WolfMonster: Monster = {
+  name: "オオカミ",
   image: "monster.png",
-  health: 50,
-  money: 20,
-  exp: 7,
+  health: 35,
+  money: 13,
+  exp: 10,
   attack: (status, setStatus, showMessage, setFreeze) =>
     new Promise<number>((resolve) => {
-      if (Math.random() > 0.8 || status.map === "AdminRoom") {
-        showMessage("ドローンはEMP起動の準備を始めた...")
+      if (Math.random() > 0.7) {
+        showMessage("オオカミはプレーヤーに飛びかかった！")
         setTimeout(() => {
           if (Math.random() > 0.6) {
-            showMessage("ドローンのEMP攻撃！200のダメージ！")
+            showMessage("オオカミが噛みついた！60のダメージ！")
             setStatus((prev) => ({
               ...prev,
-              health: Math.max(prev.health - 200, 0),
+              health: Math.max(prev.health - 60, 0),
             }))
             resolve(100)
           } else {
-            showMessage("ドローンはEMPの起動に失敗した！")
+            showMessage("プレーヤーはなんとか避けることができた。")
             resolve(0)
           }
         }, 1500)
       } else {
-        const dmg = withMargin(17, 6)
+        const dmg = withMargin(12, 5)
         resolve(monsterAttack(dmg, status, setStatus, showMessage))
       }
     }),
-  escapeChance: 0.9,
+  escapeChance: 0.8,
 }

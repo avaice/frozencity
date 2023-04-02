@@ -1,14 +1,14 @@
 import { useEffect, useRef, useState } from "react"
 
 const BGM_SRC = {
-  opening: "./sounds/opening.mp3",
-  greenworld: "./sounds/greenworld.mp3",
-  shibuya: "./sounds/shibuya.mp3",
-  msrr: "./sounds/msrr.mp3",
-  cheezecake: "./sounds/cheezecake.mp3",
-  huyuice: "./sounds/huyuice.mp3",
-  obasan: "./sounds/obasan.mp3",
-  gesuido: "./sounds/gesuido.mp3",
+  opening: "opening.mp3",
+  greenworld: "greenworld.mp3",
+  shibuya: "shibuya.mp3",
+  msrr: "msrr.mp3",
+  cheezecake: "cheezecake.mp3",
+  huyuice: "huyuice.mp3",
+  obasan: "obasan.mp3",
+  gesuido: "gesuido.mp3",
 }
 
 export type BGMType = keyof typeof BGM_SRC
@@ -28,7 +28,7 @@ export const useBgm = () => {
     ;(Object.keys(BGM_SRC) as BGMType[]).forEach((v) => {
       const newAudio = new Audio()
       newAudio.autoplay = false
-      newAudio.src = BGM_SRC[v]
+      newAudio.src = `${process.env.PUBLIC_URL}/sounds/${BGM_SRC[v]}`
       newAudio.loop = true
       newAudio.volume = 0
       newAudio.onloadeddata = () => {

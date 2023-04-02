@@ -13,6 +13,8 @@ import {
 } from "./recoilAtoms"
 import { ActionEvent, maps, StatusType } from "./types/type"
 
+import nusimLogo from "./resources/logo_mini.png"
+
 export const MSG_SPEED = 200
 
 function App() {
@@ -275,7 +277,7 @@ function App() {
         <div
           className={loadStatus[0] === loadStatus[1] ? "fadeOut" : undefined}
         >
-          <img className="logo-img" src="./logo_mini.png" />
+          <img className="logo-img" src={nusimLogo} />
           <p>
             {loadStatus[0] === loadStatus[1]
               ? "(C)2023 avaice"
