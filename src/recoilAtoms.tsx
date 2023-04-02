@@ -18,3 +18,8 @@ export const monsterState = atom<Monster | undefined>({
   key: "monsterState",
   default: undefined,
 })
+
+export const inventoryVisibleState = atom<boolean>({
+  key: "inventoryVisibleState",
+  default: false,
+})

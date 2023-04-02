@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react"
+import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 
 const BGM_SRC = {
   opening: "opening.mp3",
@@ -21,22 +21,20 @@ export const useBgm = () => {
   const [isInitializedBgm, InitializeBgm] = useState<boolean | "NOBGM">(false)
   const audio = useRef(new Map<BGMType, HTMLAudioElement>())
 
-  useEffect(() => {
-    if (!isInitializedBgm || isInitializedBgm === "NOBGM") {
-      return
-    }
+  const enableBgmEvent = useCallback(() => {
     ;(Object.keys(BGM_SRC) as BGMType[]).forEach((v) => {
       const newAudio = new Audio()
-      newAudio.autoplay = false
       newAudio.src = `${process.env.PUBLIC_URL}/sounds/${BGM_SRC[v]}`
       newAudio.loop = true
       newAudio.volume = 0
       newAudio.onloadeddata = () => {
         setLoadStatus((prev) => [prev[0] + 1, prev[1]])
       }
+      newAudio.play()
+      newAudio.pause()
       audio.current.set(v, newAudio)
     })
-  }, [isInitializedBgm])
+  }, [])
 
   useEffect(() => {
     const b = currentBgm ? audio.current.get(currentBgm) : undefined
@@ -50,6 +48,7 @@ export const useBgm = () => {
         const a = audio.current.get(v)
         if (a) {
           a.pause()
+          a.volume = 1
         }
       })
     } else {
@@ -71,7 +70,31 @@ export const useBgm = () => {
     if (b) {
       b.play()
     }
+    console.log(b)
   }, [currentBgm])
 
-  return { currentBgm, setBgm, isInitializedBgm, InitializeBgm, loadStatus }
+  const playbtn = (
+    <button
+      onClick={() => {
+        ;(Object.keys(BGM_SRC) as BGMType[]).forEach((v) => {
+          const aaa = audio.current.get(v)
+          if (!aaa) return
+          aaa.muted = false
+          aaa.play()
+        })
+      }}
+    >
+      PLAY
+    </button>
+  )
+
+  return {
+    currentBgm,
+    setBgm,
+    isInitializedBgm,
+    InitializeBgm,
+    loadStatus,
+    enableBgmEvent,
+    playbtn,
+  }
 }

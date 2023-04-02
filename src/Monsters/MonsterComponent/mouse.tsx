@@ -5,7 +5,7 @@ export const MouseMonster: Monster = {
   name: "ネズミ",
   image: "monster.png",
   health: 8,
-  money: 2,
+  money: 6,
   exp: 5,
   attack: (status, setStatus, showMessage, setFreeze): number => {
     const dmg = withMargin(18, 2)

@@ -7,6 +7,7 @@ import { cleared_obasanEncountedWithMonster } from "./Events/obasanEncountedWith
 import { useBgm } from "./modules/useBgm"
 import {
   freezeState,
+  inventoryVisibleState,
   messageState,
   monsterState,
   statusState,
@@ -25,8 +26,15 @@ function App() {
   const [status, setStatus] = useRecoilState(statusState)
   const [showingMessage, setShowingMessage] = useState("")
   const [message, showMessage] = useRecoilState(messageState)
-  const { currentBgm, setBgm, isInitializedBgm, InitializeBgm, loadStatus } =
-    useBgm()
+  const {
+    currentBgm,
+    setBgm,
+    isInitializedBgm,
+    InitializeBgm,
+    loadStatus,
+    enableBgmEvent,
+    playbtn,
+  } = useBgm()
 
   const mapData = maps[status.map]
   const map = maps[status.map].map
@@ -37,6 +45,10 @@ function App() {
   const messageWindowRef = useRef<HTMLDivElement>(null)
 
   const [monster, setMonster] = useRecoilState(monsterState)
+
+  const [isVisibleInventory, setIsVisibleInventory] = useRecoilState(
+    inventoryVisibleState
+  )
 
   useEffect(() => {
     setFreeze(!!monster)
@@ -142,7 +154,19 @@ function App() {
     }
   }
 
+  const switchInventory = () => {
+    if (!isVisibleInventory && freeze) {
+      return
+    }
+    setFreeze((prev) => !prev)
+    setIsVisibleInventory((prev) => !prev)
+  }
+
   const keyPress = (code: string) => {
+    if (code === "Escape") {
+      switchInventory()
+    }
+
     if (freeze) {
       return
     }
@@ -250,6 +274,7 @@ function App() {
           <p>サウンドを有効にしますか？</p>
           <button
             onClick={() => {
+              enableBgmEvent()
               setTimeout(() => {
                 InitializeBgm(true)
               }, 1000)
@@ -369,7 +394,9 @@ function App() {
           <button className="mini number-buttons">2</button>
           <button className="mini number-buttons">3</button>
           <button className="mini number-buttons">4</button>
-          <button className="mini">Esc</button>
+          <button className="mini" onClick={() => switchInventory()}>
+            Esc
+          </button>
         </div>
       </main>
       {status.debug && (

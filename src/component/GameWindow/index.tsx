@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react"
 import { useRecoilState } from "recoil"
 import {
   freezeState,
+  inventoryVisibleState,
   messageState,
   monsterState,
   statusState,
@@ -20,30 +21,14 @@ export const GameWindow = ({
   mapData: MapType
   windowRef?: React.Ref<HTMLDivElement>
 }) => {
-  const [isVisibleInventory, setIsVisibleInventory] = useState(false)
+  const [isVisibleInventory, setIsVisibleInventory] = useRecoilState(
+    inventoryVisibleState
+  )
   const [status] = useRecoilState(statusState)
   const position = status.position
   const direction = status.direction
   const map = mapData.map
-  const [freeze, setFreeze] = useRecoilState(freezeState) // 入力を受け付けなくするか
   const [monster] = useRecoilState(monsterState)
-
-  useEffect(() => {
-    const e = (e: KeyboardEvent) => {
-      if (e.code === "Escape") {
-        if (!isVisibleInventory && freeze) {
-          return
-        }
-        setFreeze((prev) => !prev)
-        setIsVisibleInventory((prev) => !prev)
-      }
-    }
-    document.addEventListener("keyup", e)
-
-    return () => {
-      document.removeEventListener("keyup", e)
-    }
-  }, [freeze, isVisibleInventory])
 
   const getAround = () => {
     const posY = (n: number) =>
