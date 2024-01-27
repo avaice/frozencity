@@ -15,6 +15,7 @@ import {
 import { ActionEvent, maps, StatusType } from "./types/type"
 
 import nusimLogo from "./resources/logo_mini.png"
+import { gameLoad } from "./modules/saveData"
 
 export const MSG_SPEED = 200
 
@@ -119,6 +120,8 @@ function App() {
       light: Math.max(prev.light - 1, 0),
     }))
   }, [status.position])
+
+
 
   const checkBattleAfterEvent = () => {
     if (status.keys.obasan === "モンスター撃退イベント") {
@@ -316,20 +319,63 @@ function App() {
   if (gameState === "title") {
     return (
       <div className="load-window">
+        <button
+          className="cloud-save-button"
+          onClick={() => {
+            if (localStorage.getItem("dataUniqueKey")) {
+              if (
+                window.confirm(
+                  `クラウドセーブが有効です。\n解除しますか？\n(IDの確認はゲーム内のセーブ地点で行ってください。)`
+                )
+              ) {
+                localStorage.removeItem("useCloudSave")
+                localStorage.removeItem("dataUniqueKey")
+                alert("クラウドセーブを無効にしました。")
+              }
+            } else {
+              if (
+                window.confirm(
+                  "クラウドセーブが無効です。他の端末と連携しますか？"
+                )
+              ) {
+                const id = window.prompt("IDを入力してください。")
+                if (id) {
+                  localStorage.setItem("useCloudSave", "yes")
+                  localStorage.setItem("dataUniqueKey", id)
+                  alert("設定が完了しました。")
+                }
+              }
+            }
+          }}
+          disabled
+        >
+          クラウドセーブ
+        </button>
         <div className="title fadeIn">
           <p>Frozen City</p>
+
           <div>
             <button
-              onClick={() => {
-                const savedata = localStorage.getItem("frozen-city-save-data")
+              // useCallbackしてもいいかも
+              onClick={async (e) => {
+                ;(e as any).target.innerText = "読み込み中..."
+                const savedata = await gameLoad()
                 if (savedata) {
-                  setStatus(JSON.parse(savedata))
+                  setStatus(savedata)
                 } else {
                   setStatus((prev) => ({ ...prev, map: "MyRoom" }))
                 }
-
                 setGameState("game")
                 setBgm(undefined)
+
+                setTimeout(() => {
+                  if (messageWindowRef.current) {
+                    messageWindowRef.current.style.width =
+                      (gameWindowRef.current
+                        ? gameWindowRef.current.clientWidth - 20
+                        : 0) + "px"
+                  }
+                }, 100)
               }}
             >
               冒険を始める
@@ -357,6 +403,7 @@ function App() {
 
   return (
     <div className="App">
+      
       <main
         className={
           mapData.type === "OUTDOOR"

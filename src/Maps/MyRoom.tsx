@@ -1,4 +1,5 @@
 import { ask } from "../modules/ask"
+import { gameSave } from "../modules/saveData"
 import { encountMonster } from "../Monsters/monsterUtils"
 import { MapType } from "../types/mapType"
 import { ActionEvent, StatusType } from "../types/type"
@@ -57,24 +58,55 @@ const Save: ActionEvent = async (
   _setBgm,
   setMonster
 ) => {
+  const savedata = JSON.stringify({
+    ...status,
+    position: {
+      x: 1,
+      y: 2,
+    },
+  })
   const result = await ask(
     "ゲームデータを保存しますか？",
-    ["はい", "いいえ"],
+    localStorage.getItem("useCloudSave")
+      ? ["はい", "いいえ", "クラウドセーブIDの確認"]
+      : ["はい", "いいえ" /** "クラウドセーブを有効化" */],
     setFreeze,
     showMessage
   )
   if (result === "はい") {
-    localStorage.setItem(
-      "frozen-city-save-data",
-      JSON.stringify({
-        ...status,
-        position: {
-          x: 1,
-          y: 2,
-        },
-      })
-    )
-    showMessage("保存完了")
+    if (await gameSave(savedata)) {
+      showMessage("保存完了")
+    } else {
+      if (localStorage.getItem("useCloudSave") === "yes") {
+        showMessage(
+          "クラウドへの保存に失敗しました。\nインターネットに接続されているかご確認ください。"
+        )
+      } else {
+        showMessage("保存中に不明なエラー。でも保存はできています。")
+      }
+    }
+  } else if (result === "クラウドセーブを有効化") {
+    if (
+      (await ask(
+        "クラウドセーブを有効化すると、パソコンとスマホでゲームデータが同期できます。\n有効化しますか？",
+        ["はい", "いいえ"],
+        setFreeze,
+        showMessage
+      )) === "はい"
+    ) {
+      localStorage.setItem("useCloudSave", "yes")
+      if (await gameSave(savedata)) {
+        showMessage("保存完了")
+      } else {
+        showMessage(
+          "クラウドへの保存に失敗しました。\nインターネットに接続されているかご確認ください。"
+        )
+      }
+    } else {
+      showMessage("クラウドセーブの設定をキャンセルしました。")
+    }
+  } else if (result === "クラウドセーブIDの確認") {
+    showMessage(`IDは${localStorage.getItem("dataUniqueKey")}です。`)
   } else {
     showMessage("保存しませんでした")
   }

@@ -16,6 +16,7 @@ export const Debugger: Item = {
       ...prev,
       debug: !prev.debug,
       health: 999,
+      money: 99999,
     }))
   },
 }

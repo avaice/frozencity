@@ -38,6 +38,17 @@ body {
   line-height: 120px;
   font-weight: bold;
 }
+
+.cloud-save-button {
+  transition: box-shadow 0.5s;
+  position: absolute;
+  color: black;
+  top: 10px;
+  left: 10px;
+}
+.cloud-save-button:hover {
+  box-shadow: none !important;
+}
 .load-window > div button {
   transition: box-shadow 0.5s;
   border: none;
@@ -161,6 +172,9 @@ main {
 .black {
   background-color: black;
 }
+
+
+
 @media screen and (max-width: 650px) {
   .controller {
     display: block;

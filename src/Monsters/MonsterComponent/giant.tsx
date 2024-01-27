@@ -4,7 +4,7 @@ import { Monster, monsterAttack } from "../monsterUtils"
 export const GiantMonster: Monster = {
   name: "ジャイアント",
   image: "monster.png",
-  health: 15,
+  health: 12,
   money: 5,
   exp: 4,
   attack: (status, setStatus, showMessage, setFreeze): number => {

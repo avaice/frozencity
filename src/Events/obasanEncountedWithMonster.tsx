@@ -36,7 +36,7 @@ export const cleared_obasanEncountedWithMonster: ActionEvent = (
     )
     setTimeout(() => {
       showMessage(
-        "おばさん\n「あなたがいなかったら助からなかったわ。\nほんの少しだけど、これをあげる。\n私もこの街に住んでいるから、よかったら来てくださいね。」"
+        "おばさん\n「あなたがいなかったら助からなかったわ。\nこの街おっかないわね。怪我してたらちゃんと治すのよ」"
       )
       setTimeout(() => {
         setStatus((prev) => ({
@@ -52,7 +52,7 @@ export const cleared_obasanEncountedWithMonster: ActionEvent = (
         showMessage("40Gをもらった。")
         setTimeout(() => {
           showMessage(
-            "プレーヤーは、このことをみそろりに報告しに行こうと思った。"
+            "プレーヤーは、このことをみそろりに報告しに行こうと思った。\n【Escキーを押すとインベントリが開き、回復アイテムを使用できます。】"
           )
           setFreeze(false)
         }, 1000)

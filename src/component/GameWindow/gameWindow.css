@@ -81,6 +81,9 @@
   color: black;
   transform: translateZ(1000px);
 }
+.status-health-danger {
+  color: red;
+}
 
 .game-window {
   --topMargin: calc(var(--tileSize) / 2);

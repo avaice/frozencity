@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react"
-import { useRecoilState } from "recoil"
+import { useRecoilState, useRecoilValue } from "recoil"
 import {
   freezeState,
   inventoryVisibleState,
@@ -29,6 +29,7 @@ export const GameWindow = ({
   const direction = status.direction
   const map = mapData.map
   const [monster] = useRecoilState(monsterState)
+  const freeze = useRecoilValue(freezeState)
 
   const getAround = () => {
     const posY = (n: number) =>
@@ -203,6 +204,10 @@ export const GameWindow = ({
         <p>
           x= {position.x} y= {position.y}
         </p>
+        <p className={status.health < 20 ? "status-health-danger" : undefined}>
+          HP: {status.health} / {status.maxHealth}
+        </p>
+        {freeze && <p>移動操作無効</p>}
       </div>
 
       <Inventory

@@ -70,7 +70,6 @@ export const useBgm = () => {
     if (b) {
       b.play()
     }
-    console.log(b)
   }, [currentBgm])
 
   const playbtn = (
