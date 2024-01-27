@@ -52,7 +52,7 @@ export const cleared_obasanEncountedWithMonster: ActionEvent = (
         showMessage("40Gをもらった。")
         setTimeout(() => {
           showMessage(
-            "プレーヤーは、このことをみそろりに報告しに行こうと思った。\n【Escキーを押すとインベントリが開き、回復アイテムを使用できます。】"
+            "プレーヤーは、このことをみそろりに報告しに行こうと思った。\n【Tip: Escキーを押すとインベントリが開き、回復アイテムを使用できます。】"
           )
           setFreeze(false)
         }, 1000)

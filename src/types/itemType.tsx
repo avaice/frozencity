@@ -28,6 +28,7 @@ import { SutenresuTate } from "../items/shields/sutenresuTate"
 import { NeoBesuto } from "../items/shields/neoBesuto"
 import { PlatinumSword } from "../items/swords/platinumSword"
 import { MiniSword } from "../items/swords/miniSword"
+import { Pittan } from "../items/pittan"
 
 export type Item = {
   name: string
@@ -45,6 +46,7 @@ export type Item = {
 }
 export const Items = {
   Taimatsu,
+  Pittan,
   Chocolate,
   Unagi,
   Debugger,

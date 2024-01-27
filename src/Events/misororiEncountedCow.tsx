@@ -46,7 +46,7 @@ export const cleared_MisororiMonsterEvent: ActionEvent = (
         misorori: "料理開放",
         engineer: "初対面イベント",
       },
-      items: [...prev.items, "Beef"],
+      items: [...prev.items, "Beef", "Pittan"],
     }))
     showMessage("牛を倒した後、プレーヤーはみそろりに話しかけられた。")
     setTimeout(() => {
@@ -54,13 +54,16 @@ export const cleared_MisororiMonsterEvent: ActionEvent = (
         "みそろり「ありがとう...もう無理だと思った..でもこの牛美味しそうだよ！私の家に持ってきてくれたら料理してあげる！」"
       )
       setTimeout(() => {
-        showMessage("牛肉を手に入れた。")
+        showMessage("みそろり「あっ..血が出てるよ。これ使って！」")
         setTimeout(() => {
-          showMessage(
-            "みそろり「...あ、あと、さっき知らないおじさんに会ったよ。まだ近くにいると思う。」"
-          )
-          setFreeze(false)
-        }, 2000)
+          showMessage("かわいいピッタンを手に入れた。")
+          setTimeout(() => {
+            showMessage(
+              "みそろり「...あ、あと、さっき知らないおじさんに会ったよ。まだ近くにいると思う。」"
+            )
+            setFreeze(false)
+          }, 2000)
+        }, 2500)
       }, 2500)
     }, 2000)
   }

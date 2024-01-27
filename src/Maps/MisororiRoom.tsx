@@ -92,7 +92,12 @@ const MSRR: ActionEvent = async (
                 misorori: "モンスター撃退イベントMSRR版",
               },
             }))
-            setFreeze(false)
+            setTimeout(() => {
+              showMessage(
+                "【Tip: こまめにセーブをすると良いです。家でできます。】"
+              )
+              setFreeze(false)
+            }, 1000)
           }, 1600)
         }, 2000)
       }, 1000)
