@@ -4,8 +4,8 @@ import { Monster, monsterAttack } from "../monsterUtils"
 export const BeeMonster: Monster = {
   name: "スズメバチ",
   image: "monster.png",
-  health: 80,
-  money: 12,
+  health: 30,
+  money: 16,
   exp: 9,
   attack: (status, setStatus, showMessage, setFreeze): number => {
     const dmg = withMargin(12, 7)

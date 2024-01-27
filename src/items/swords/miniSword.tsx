@@ -5,7 +5,7 @@ export const MiniSword: Item = {
   name: "短剣",
   description: "取り回しのしやすいコンパクトな剣。",
   resell: 40,
-  equip: { type: "sword", power: 9 },
+  equip: { type: "sword", power: 20 },
   action: (
     status: StatusType,
     setStatus: React.Dispatch<React.SetStateAction<StatusType>>,

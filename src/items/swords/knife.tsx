@@ -5,7 +5,7 @@ export const Knife: Item = {
   name: "サバイバルナイフ",
   description: "そこそこ切れ味の良いナイフ。",
   resell: 10,
-  equip: { type: "sword", power: 6 },
+  equip: { type: "sword", power: 9 },
   action: (
     status: StatusType,
     setStatus: React.Dispatch<React.SetStateAction<StatusType>>,

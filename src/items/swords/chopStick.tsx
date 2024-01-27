@@ -6,7 +6,7 @@ export const ChopStick: Item = {
   name: "お箸",
   description: "自分の部屋にあった箸。武器としては心許ない。",
   resell: 0,
-  equip: { type: "sword", power: 2 },
+  equip: { type: "sword", power: 3 },
   action: (
     status: StatusType,
     setStatus: React.Dispatch<React.SetStateAction<StatusType>>,

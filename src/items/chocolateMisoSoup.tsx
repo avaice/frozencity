@@ -12,9 +12,7 @@ export const ChocolateMisoSoup: Item = {
     showMessage: (msg: string) => void,
     setFreeze: React.Dispatch<React.SetStateAction<boolean>>
   ) => {
-    showMessage(
-      "チョコレートはそのまま食べた方が美味しいと思った。体力が少し回復した。"
-    )
+    showMessage("味噌汁は甘くないほうがいい。体力が少し回復した。")
     setStatus((prev) => ({
       ...prev,
       health: Math.min(prev.maxHealth, prev.health + 8),

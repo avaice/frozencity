@@ -13,8 +13,14 @@ import {
 } from "../../recoilAtoms"
 import { ItemType, Items } from "../../types/itemType"
 import "./battle.css"
+import { StatusType } from "../../types/type"
 
 type BattleCommands = "attack" | "kaiwa" | "nigeru" | MagicList
+
+export const getPower = (status: StatusType) => {
+  const sword = Items[status.equipments.sword].equip
+  return calcPower(status.level) + (sword ? sword.power : 0)
+}
 
 export const Battle = ({ visible }: { visible: boolean }) => {
   const selectRef = useRef<HTMLSelectElement>(null)
@@ -60,11 +66,7 @@ export const Battle = ({ visible }: { visible: boolean }) => {
       new Promise<number>((resolve) => {
         showMessage("プレーヤーの攻撃！")
         setTimeout(() => {
-          const sword = Items[status.equipments.sword].equip
-          const dmg = withMargin(
-            calcPower(status.level) + (sword ? sword.power : 0),
-            3
-          )
+          const dmg = withMargin(getPower(status), 3)
           if (dmg === 0) {
             showMessage("攻撃は命中しなかった。")
           } else {

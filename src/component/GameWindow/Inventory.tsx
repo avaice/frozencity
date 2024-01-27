@@ -10,6 +10,7 @@ import {
   monsterState,
 } from "../../recoilAtoms"
 import { ItemType, Items } from "../../types/itemType"
+import { getPower } from "./Battle"
 
 export const Inventory = ({
   visible,
@@ -118,7 +119,8 @@ export const Inventory = ({
       <h2 className="game-inventory-title">Inventory</h2>
       <div>
         <p className="game-inventory-status">
-          Lv:{status.level} Health:{status.health}/{status.maxHealth} Magical:
+          Lv:{status.level} Health:{status.health}/{status.maxHealth} Power:
+          {getPower(status)} Magical:
           {status.magical} Money:{status.money}G
         </p>
       </div>
