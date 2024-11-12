@@ -1,28 +1,28 @@
-import { useRef, useState, useEffect } from "react"
-import { useRecoilState } from "recoil"
-import { STATIC_GAME_SETTING } from "../../gameSettings"
-import { Unagi } from "../../items/unagi"
-import { ask } from "../../modules/ask"
-import { statusState, messageState, freezeState } from "../../recoilAtoms"
-import { ItemType, Items } from "../../types/itemType"
-import { ActionEvent, StatusType } from "../../types/type"
+import { useRef, useState, useEffect } from "react";
+import { useRecoilState } from "recoil";
+import { STATIC_GAME_SETTING } from "../../gameSettings";
+import { Unagi } from "../../items/unagi";
+import { ask } from "../../modules/ask";
+import { statusState, messageState, freezeState } from "../../recoilAtoms";
+import { ItemType, Items } from "../../types/itemType";
+import { ActionEvent, StatusType } from "../../types/type";
 
 type ShopItem = {
-  item: ItemType
-  price: number
-}
+  item: ItemType;
+  price: number;
+};
 
 type ShopType = {
-  items: ShopItem[]
+  items: ShopItem[];
   message: {
-    buyAfter: string
-    thanks: string
-  }
+    buyAfter: string;
+    thanks: string;
+  };
   onExit: (
     status: StatusType,
     setStatus: React.Dispatch<React.SetStateAction<StatusType>>
-  ) => void
-}
+  ) => void;
+};
 
 const magicalShop: ShopType = {
   items: [
@@ -44,9 +44,9 @@ const magicalShop: ShopType = {
         y: 13,
       },
       direction: "S",
-    }))
+    }));
   },
-}
+};
 
 const giantShop: ShopType = {
   items: [
@@ -68,9 +68,9 @@ const giantShop: ShopType = {
         y: 13,
       },
       direction: "S",
-    }))
+    }));
   },
-}
+};
 
 const obasanShop: ShopType = {
   items: [
@@ -78,6 +78,7 @@ const obasanShop: ShopType = {
     { item: "Unagi", price: 20 },
     { item: "Taimatsu", price: 5 },
     { item: "Menbou", price: 15 },
+    { item: "Clip", price: 20 },
   ],
   message: {
     buyAfter: "おばさん「まだ見るかい？」",
@@ -92,9 +93,9 @@ const obasanShop: ShopType = {
         y: 3,
       },
       direction: "W",
-    }))
+    }));
   },
-}
+};
 
 const kajiyaShop: ShopType = {
   items: [
@@ -120,9 +121,9 @@ const kajiyaShop: ShopType = {
         y: 7,
       },
       direction: "S",
-    }))
+    }));
   },
-}
+};
 
 const bugShop: ShopType = {
   items: [{ item: "Debugger", price: 0 }],
@@ -141,108 +142,108 @@ const bugShop: ShopType = {
         y: 7,
       },
       direction: "S",
-    }))
+    }));
   },
-}
+};
 
 export const Shop = ({ visible }: { visible: boolean }) => {
-  const selectRef = useRef<HTMLSelectElement>(null)
-  const [status, setStatus] = useRecoilState(statusState)
-  const [message, showMessage] = useRecoilState(messageState)
-  const [freeze, setFreeze] = useRecoilState(freezeState) // 入力を受け付けなくするか
-  const [buyFreeze, setBuyFreeze] = useState(false) // 入力を受け付けなくするか
+  const selectRef = useRef<HTMLSelectElement>(null);
+  const [status, setStatus] = useRecoilState(statusState);
+  const [message, showMessage] = useRecoilState(messageState);
+  const [freeze, setFreeze] = useRecoilState(freezeState); // 入力を受け付けなくするか
+  const [buyFreeze, setBuyFreeze] = useState(false); // 入力を受け付けなくするか
 
-  const [selecting, setSelecting] = useState<ShopItem | "leave" | undefined>()
+  const [selecting, setSelecting] = useState<ShopItem | "leave" | undefined>();
   useEffect(() => {
     if (selectRef.current) {
-      selectRef.current.focus()
+      selectRef.current.focus();
     }
-    setSelecting(undefined)
-  }, [visible])
+    setSelecting(undefined);
+  }, [visible]);
 
   useEffect(() => {
     if (visible) {
-      setFreeze(true)
+      setFreeze(true);
     } else {
-      setFreeze(false)
+      setFreeze(false);
     }
-  }, [visible, setFreeze])
+  }, [visible, setFreeze]);
 
   useEffect(() => {
     if (!buyFreeze && selectRef.current) {
-      selectRef.current.focus()
+      selectRef.current.focus();
     }
-  }, [buyFreeze])
+  }, [buyFreeze]);
 
   if (!visible) {
-    return null
+    return null;
   }
 
   const getShop = (): ShopType => {
     switch (status.map) {
       case "ObasanRoom":
-        return obasanShop
+        return obasanShop;
       case "Kajiya":
-        return kajiyaShop
+        return kajiyaShop;
       case "MagicalZakkaRoom":
         if (status.keys.engine) {
-          return magicalShop
+          return magicalShop;
         }
-        return giantShop
+        return giantShop;
       default:
-        return bugShop
+        return bugShop;
     }
-  }
+  };
 
   const buy = () => {
     const leave = () => {
-      showMessage(getShop().message.thanks)
-      getShop().onExit(status, setStatus)
-      setBuyFreeze(false)
-      return
-    }
+      showMessage(getShop().message.thanks);
+      getShop().onExit(status, setStatus);
+      setBuyFreeze(false);
+      return;
+    };
     if (!selecting) {
-      return
+      return;
     }
     if (selecting === "leave") {
-      leave()
-      return
+      leave();
+      return;
     }
     if (selecting.price > status.money) {
       showMessage(
         `${Items[selecting.item].name}を買うには資金が${
           selecting.price - status.money
         }G足りない。`
-      )
-      return
+      );
+      return;
     }
     if (STATIC_GAME_SETTING.maxItem <= status.items.length) {
-      showMessage("荷物がいっぱいで購入できない。")
-      return
+      showMessage("荷物がいっぱいで購入できない。");
+      return;
     }
 
-    setBuyFreeze(true)
+    setBuyFreeze(true);
     setStatus((prev) => ({
       ...prev,
       items: [...prev.items, selecting.item],
       money: prev.money - selecting.price,
-    }))
-    showMessage(`${Items[selecting.item].name}を購入した。`)
+    }));
+    showMessage(`${Items[selecting.item].name}を購入した。`);
     setTimeout(async () => {
       const a = await ask(
         getShop().message.buyAfter,
         ["まだ買い物する", "外に出る"],
         setFreeze,
         showMessage
-      )
+      );
       if (a === "外に出る") {
-        leave()
-        return
+        leave();
+        return;
       }
-      setBuyFreeze(false)
-      showMessage("プレーヤーは、もう少し店内を見てみることにした。")
-    }, 500)
-  }
+      setBuyFreeze(false);
+      showMessage("プレーヤーは、もう少し店内を見てみることにした。");
+    }, 500);
+  };
 
   return (
     <div className="game-inventory">
@@ -262,18 +263,18 @@ export const Shop = ({ visible }: { visible: boolean }) => {
             size={8}
             onChange={(e) => {
               if (e.target.value === "leave") {
-                setSelecting("leave")
-                return
+                setSelecting("leave");
+                return;
               }
               setSelecting(
                 getShop().items.find(
                   (v) => v.item === (e.target.value as ItemType)
                 )
-              )
+              );
             }}
             onKeyUp={(e) => {
               if (e.code === "Enter") {
-                buy()
+                buy();
               }
             }}
             disabled={buyFreeze}
@@ -310,5 +311,5 @@ export const Shop = ({ visible }: { visible: boolean }) => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};

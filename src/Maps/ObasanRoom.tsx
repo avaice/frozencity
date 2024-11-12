@@ -64,5 +64,8 @@ export const ObasanRoom: MapType = {
           ? "おばさん「この前は助かったわ。安くするから何かいかが？」"
           : "おばさん「外が物騒ね...」")
     )
+    if(status.keys.engineer === "エンジニア開放" && status.keys.obasan !== "針金販売済"){
+      showMessage("新商品があるわよ。")
+    }
   },
 }

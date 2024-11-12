@@ -15,6 +15,7 @@ import { Urayama } from "../Maps/Urayama"
 import { BGMType } from "../modules/useBgm"
 import { Monster } from "../Monsters/monsterUtils"
 import { ItemType } from "./itemType"
+import { Yokan } from "../Maps/Yokan"
 
 export const maps = {
   MyRoom,
@@ -29,6 +30,7 @@ export const maps = {
   Gesuido,
   MagicalZakkaRoom,
   RecycleShop,
+  Yokan
 }
 
 export type ActionEvent = (
@@ -69,7 +71,7 @@ export type StatusType = {
       | "モンスター撃退イベントMSRR版_進行中"
       | "モンスター撃退イベントMSRR版_バトル中"
       | "料理開放"
-    obasan?: "モンスター撃退イベント" | "モンスターから助けた"
+    obasan?: "モンスター撃退イベント" | "モンスターから助けた" | "針金販売済"
     engineer?: "初対面イベント" | "エンジニア開放"
   }
   magicals: MagicList[]

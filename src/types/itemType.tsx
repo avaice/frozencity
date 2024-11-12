@@ -29,6 +29,7 @@ import { NeoBesuto } from "../items/shields/neoBesuto"
 import { PlatinumSword } from "../items/swords/platinumSword"
 import { MiniSword } from "../items/swords/miniSword"
 import { Pittan } from "../items/pittan"
+import { Clip } from "../items/clip"
 
 export type Item = {
   name: string
@@ -48,6 +49,7 @@ export const Items = {
   Taimatsu,
   Pittan,
   Chocolate,
+  Clip,
   Unagi,
   Debugger,
   ChopStick,

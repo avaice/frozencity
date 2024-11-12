@@ -1,5 +1,6 @@
 import { misororiCooking } from "../Events/misororiCooking"
 import { ask } from "../modules/ask"
+import { wait } from "../modules/wait"
 import { encountMonster } from "../Monsters/monsterUtils"
 import { MapType } from "../types/mapType"
 import { ActionEvent, StatusType } from "../types/type"
@@ -42,6 +43,29 @@ const GoToYokan: ActionEvent = async (
   showMessage(
     "今にも崩れそうな洋館がある。\n鍵がかかっているが、ごく単純な作りをしているので、針金で開けることができそうだ。"
   )
+  if(status.items.find((item) => item === "Clip")){
+    await wait(500)
+    const result = await ask(
+      "クリップを使って鍵を開けますか？",
+      ["開ける", "やめておく"],
+      setFreeze,
+      showMessage
+    )
+
+    if (result === "開ける") {
+      setStatus((prev) => ({
+        ...prev,
+        map: "Yokan",
+        position: {
+          x: 1,
+          y: 1,
+        },
+        direction: "E",
+      }))
+    } else {
+      showMessage("やめておいた。")
+    }
+  }
 }
 const GoToGesuido: ActionEvent = async (
   status,
