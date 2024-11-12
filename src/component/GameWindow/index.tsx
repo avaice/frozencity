@@ -13,6 +13,7 @@ import { Battle } from "./Battle"
 import "./gameWindow.css"
 import { Inventory } from "./Inventory"
 import { Shop } from "./Shop"
+import { MiniMap } from "./MiniMap"
 
 export const GameWindow = ({
   mapData,
@@ -225,6 +226,8 @@ export const GameWindow = ({
       />
 
       <Battle visible={!!monster} />
+
+      <MiniMap map={mapData} position={position} size={64}/>
     </div>
   )
 }

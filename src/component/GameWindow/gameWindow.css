@@ -166,6 +166,16 @@
     translateZ(calc(var(--tileSize) * -3.75));
 }
 
+.mini-map{
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: white;
+  border: solid 1px black;
+  opacity: 0.85;
+  transform: translateZ(1000px);
+}
+
 @media screen and (max-width: 650px) {
   .game-window-wrapper {
     --tileSize: calc(100vw / 3.5);

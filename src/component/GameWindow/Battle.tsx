@@ -88,7 +88,8 @@ export const Battle = ({ visible }: { visible: boolean }) => {
       new Promise<boolean>((resolve) => {
         const exitNotAllowed =
           status.keys.obasan === "モンスター撃退イベント" ||
-          status.keys.misorori === "モンスター撃退イベントMSRR版_進行中"
+          status.keys.misorori?.includes("モンスター撃退イベントMSRR版_")
+        console.log(exitNotAllowed)
         showMessage("プレーヤーは逃亡を試みた！")
         setTimeout(() => {
           if (Math.random() > monster.escapeChance || exitNotAllowed) {
@@ -198,7 +199,7 @@ export const Battle = ({ visible }: { visible: boolean }) => {
       </div>
       <div className="game-battle-main">
         <div className="game-battle-main-child left">
-          <h3>Monster</h3>
+          {/* <h3>Monster</h3> */}
           <img
             className={"game-battle-main-monster"}
             src={

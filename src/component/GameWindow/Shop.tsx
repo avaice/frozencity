@@ -99,7 +99,7 @@ const obasanShop: ShopType = {
 const kajiyaShop: ShopType = {
   items: [
     { item: "Taimatsu", price: 7 },
-    { item: "Knife", price: 50 },
+    { item: "Knife", price: 30 },
     { item: "MiniSword", price: 120 },
     { item: "Axe", price: 250 },
     { item: "PlatinumSword", price: 580 },
